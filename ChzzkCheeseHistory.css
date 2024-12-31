@@ -1,0 +1,105 @@
+@charset "utf-8";
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    font-size: 24px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+ol {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+ol li {
+    margin-bottom: 10px;
+}
+
+ol li span {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+select, input[type="text"], input[type="file"], button {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button p {
+    color: black;
+}
+
+#output {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#totalPayAmount {
+    font-size: 18px;
+    color: #555;
+}
+
+#channelList button {
+    display: inline-block;
+    margin: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#channelList button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#channelList button img {
+    border-radius: 8px;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+#channelList button p {
+    margin: 10px 0 0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#channelList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
+}
+
+#monthlyChart {
+    margin-top: 20px;
+}

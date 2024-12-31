@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스트리머별 치즈 후원 내역 확인</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="./ChzzkCheeseHistory.css">
+    <link rel="icon" type="image/png" href="https://ssl.pstatic.net/static/nng/glive/icon/favicon.png">
+</head>
+<body>
+    <h1>스트리머별 치즈 후원 내역 확인</h1>
+    <ol>
+        <li>먼저 네이버에서 로그인을 합니다.</li>
+        <li>아래 연도와 가져올 후원내역 데이터 개수를 입력합니다.<span>(기본 2024년, 10,000개)</span></li>
+        <li>후원내역 버튼을 클릭하여 새창으로 후원내역 페이지를 열어줍니다.</li>
+        <li>후원내역 페이지에서 컨트롤 + S 를 눌러 후원내역 JSON 파일을 저장합니다.<span>(저장 후 후원내역 페이지는 닫아도 됩니다.)</span></li>
+        <li>파일선택 버튼을 클릭하여 저장한 파일을 등록합니다.</li>
+        <li>확인하고 싶은 스트리머를 클릭합니다.</li>
+        <li>하단의 그래프를 확인하세요.</li>
+    </ol>
+    <select id="searchYear">
+        <option value="2025">2025년</option>
+        <option value="2024" selected>2024년</option>
+        <option value="2023">2023년</option>
+        <option value="2022">2022년</option>
+    </select>
+    <input type="text" id="size" value="10000" maxlength="5" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')" />
+    <button onclick="openHistory();">후원내역</button>
+    <a href="https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=10000&searchYear=2024" target="_blank" id="apiLink"></a>
+    <br /><br />
+    <input type="file" id="jsonFileInput" accept="application/json">
+    <div id="output" style="margin-top: 20px;">
+        <h2 id="totalPayAmount">2024년 전체 후원 금액 : 0원</h2>
+        <div id="channelList">
+
+        </div>
+        <div id="channelHistory">
+            <h3 id="channelName"></h3>
+            <canvas id="monthlyChart" width="800" height="400"></canvas>
+        </div>
+    </div>
+
+    <script src="./ChzzkCheeseHistory.js"></script>
+</body>
+</html>
