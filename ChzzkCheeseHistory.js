@@ -42,7 +42,9 @@ document.addEventListener("DOMContentLoaded", function() {
                                 channelName: item.channelName,
                                 channelImageUrl: item.channelImageUrl,
                                 channelTotal: 0,
-                                monthTotal: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                channelCount: 0,
+                                monthTotal: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                monthCount: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                             });
                         }
                         
@@ -50,6 +52,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         if(channelIdx !== -1) {
                             channels[channelIdx].channelTotal += Number(item.payAmount);
                             channels[channelIdx].monthTotal[Number(item.purchaseDate.split('-')[1]) - 1] += Number(item.payAmount);
+
+                            channels[channelIdx].channelCount += 1;
+                            channels[channelIdx].monthCount[Number(item.purchaseDate.split('-')[1]) - 1] += 1;
                         }
                     });
                     
@@ -65,8 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
             };
     
             reader.readAsText(file);
-        } else {
-            document.getElementById("channelList").innerHTML = "<h3>선택된 파일이 없습니다.</h3>";
         }
     });
 });
@@ -98,7 +101,7 @@ function makeList(channels) {
 function getChannelHistory(channelId) {
     let channel = channels.find(channel => channel.channelId === channelId);
 
-    document.getElementById("channelName").innerText = `${channel.channelName} 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원`;
+    document.getElementById("channelName").innerText = `${channel.channelName} 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원 (${channel.channelCount}회)`;
 
     renderMonthlyChart(channel);
 }
@@ -106,18 +109,16 @@ function getChannelHistory(channelId) {
 function renderMonthlyChart(channel) {
     const ctx = document.getElementById('monthlyChart').getContext('2d');
 
-    // 기존 그래프가 있으면 삭제
     if (window.monthlyChart instanceof Chart) {
         window.monthlyChart.destroy();
     }
 
-    // 새 가로 막대 그래프 생성
     window.monthlyChart = new Chart(ctx, {
-        type: 'bar', // Chart.js 3.x부터는 'horizontalBar' 대신 'bar'를 사용하며, 옵션으로 가로 설정
+        type: 'bar',
         data: {
             labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
             datasets: [{
-                label: `${channel.channelName}의 월별 후원 금액`,
+                label: `2024 ${channel.channelName}`,
                 data: channel.monthTotal,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -125,20 +126,17 @@ function renderMonthlyChart(channel) {
             }]
         },
         options: {
-            indexAxis: 'y', // 가로 막대 설정
-            responsive: true,
             scales: {
                 x: {
                     beginAtZero: true,
                     title: {
-                        display: true,
-                        text: '후원 금액 (원)'
+                        display: true
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: '월'
+                        text: '후원 금액 (원)'
                     }
                 }
             }
