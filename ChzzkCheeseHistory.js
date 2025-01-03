@@ -1,5 +1,9 @@
 var channels = [];
 
+function openProfile() {
+    document.getElementById("profileUrl").click();
+}
+
 function chgUrl() {
     document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=${document.getElementById("size").value}&searchYear=${document.getElementById("searchYear").value}`;
 }

@@ -20,15 +20,27 @@
 </head>
 <body>
     <h1>스트리머별 치즈 후원 내역 확인</h1>
-    <ol>
-        <li>먼저 네이버에서 로그인을 합니다.</li>
-        <li>아래 연도와 가져올 후원내역 데이터 개수를 입력합니다.<span>(기본 2025년, 10,000개)</span></li>
-        <li>후원내역 버튼을 클릭하여 새창으로 후원내역 페이지를 열어줍니다.</li>
-        <li>후원내역 페이지에서 컨트롤 + S 를 눌러 후원내역 JSON 파일을 저장합니다.<span>(저장 후 후원내역 페이지는 닫아도 됩니다.)</span></li>
-        <li>파일선택 버튼을 클릭하여 저장한 파일을 등록합니다.</li>
-        <li>확인하고 싶은 스트리머를 클릭합니다.</li>
-        <li>하단의 그래프를 확인하세요.</li>
-    </ol>
+
+    <div id="discriptions">
+        <p>개인적으로 각 스트리머별 치즈 사용 내역을 확인하고 싶어 만든 페이지입니다.</p>
+        <p>치지직의 후원 내역 JSON 데이터를 활용하여 연도별, 월별 치즈 후원 금액 합계와 횟수를 그래프로 표출하는 기능입니다.</p>
+        <p>상세내역을 확인하고 싶으신 분은 아래 버튼을 클릭하여 치지직의 치즈 사용 내역 페이지로 이동해주시기 바랍니다.</p>
+        <button onclick="openProfile();">치지직 치즈 사용 내역 페이지</button>
+        <a href="https://game.naver.com/profile#cash" id="profileUrl" target="_blank"></a>
+    </div>
+
+    <div class="mb20" id="discriptions">
+        <h3>사용방법</h3>
+        <ol>
+            <li>먼저 네이버에서 로그인을 합니다.</li>
+            <li>아래 연도와 가져올 후원내역 데이터 개수를 입력합니다.<span>(기본 2025년, 10,000개)</span></li>
+            <li>후원내역 버튼을 클릭하여 새창으로 후원내역 페이지를 열어줍니다.</li>
+            <li>후원내역 페이지에서 컨트롤 + S 를 눌러 후원내역 JSON 파일을 저장합니다.<span>(저장 후 후원내역 페이지는 닫아도 됩니다.)</span></li>
+            <li>파일선택 버튼을 클릭하여 저장한 파일을 등록합니다.</li>
+            <li>확인하고 싶은 스트리머를 클릭합니다.</li>
+            <li>하단의 그래프를 확인하세요.</li>
+        </ol>
+    </div>
 
     <select id="searchYear" onchange="chgUrl();">
         <option value="2023">2023년</option>
@@ -46,15 +58,15 @@
     <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple />
     <span id="fileList"></span>
 
-    <div id="output" style="margin-top: 20px;">
+    <div class="mt20" id="output">
         <h2 id="totalPayAmount">전체 후원 금액 : 0원</h2>
         <div id="channelList">
 
         </div>
         <div id="channelHistory">
-            <h3 id="channelInfo"></h3>
+            <h3 class="mb5" id="channelInfo"></h3>
             <ul id="channelInfoYear"></ul>
-            <canvas id="monthlyChart" height="100px"></canvas>
+            <canvas class="mt20" id="monthlyChart" height="100px"></canvas>
         </div>
     </div>
 

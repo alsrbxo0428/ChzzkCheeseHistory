@@ -53,6 +53,28 @@ button p {
     color: black;
 }
 
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb5 {
+    margin-bottom: 5px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+#discriptions {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    padding-top: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 40%;
+}
+
 #output {
     background: white;
     border-radius: 10px;
@@ -98,16 +120,4 @@ button p {
     flex-wrap: wrap;
     gap: 10px;
     justify-content: start;
-}
-
-#channelInfo {
-    margin-bottom: 5px;
-}
-
-#channelInfoYear {
-    margin: 0px;
-}
-
-#monthlyChart {
-    margin-top: 20px;
 }
