@@ -43,6 +43,7 @@ function readFile(event) {
                         window.monthlyChart.destroy();
                     }
                     document.getElementById("channelInfo").innerText = '';
+                    document.getElementById("channelInfoYear").innerText = '';
 
                     let channelExist = false;
                     let channelIdx = -1;
@@ -165,6 +166,25 @@ function renderMonthlyChart(channel) {
             datasets: makeChartDatasets(channel)
         },
         options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            return `${tooltipItems[0].dataset.label} ${tooltipItems[0].label}`;
+                        },
+                        label: function(tooltipItem) {
+                            return `후원 금액: ${tooltipItem.formattedValue}원`;
+                        },
+                        footer: function(tooltipItem) {
+                            let year = Number(tooltipItem[0].dataset.label.replace(/[^0-9]/g, ''));
+                            let yearIdx = channel.yearData.findIndex(data => data.year === year);
+                            let dataIdx = tooltipItem[0].dataIndex;
+
+                            return `후원 횟수: ${channel.yearData[yearIdx].monthCount[dataIdx]}회`;
+                        }
+                    }
+                }
+            },
             scales: {
                 x: {
                     beginAtZero: true,
@@ -190,7 +210,7 @@ function makeChartDatasets(channel) {
         yearIdx = channel.yearData.findIndex(data => data.year === Number(option.value));
         if(yearIdx !== -1) {
             datasets.push({
-                label: `${channel.yearData[yearIdx].year}년 ${channel.channelName}`,
+                label: `${channel.yearData[yearIdx].year}년`,
                 data: channel.yearData[yearIdx].monthTotal
             });
             
