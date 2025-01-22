@@ -88,6 +88,13 @@ button p {
     color: #555;
 }
 
+#channelList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
+}
+
 #channelList button {
     display: inline-block;
     margin: 10px;
@@ -115,9 +122,7 @@ button p {
     font-size: 14px;
 }
 
-#channelList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: start;
+#cheeseImg {
+    height: 35px;
+    position: absolute;
 }

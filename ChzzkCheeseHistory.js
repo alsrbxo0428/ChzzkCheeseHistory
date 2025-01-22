@@ -66,6 +66,10 @@ function readFile(event) {
                                 channelImageUrl: item.channelImageUrl,
                                 channelTotal: 0,
                                 channelCount: 0,
+                                cheese01: false,
+                                cheese02: false,
+                                cheese03: false,
+                                cheese04: false,
                                 yearData: []
                             });
                         }
@@ -74,6 +78,22 @@ function readFile(event) {
                         if(channelIdx !== -1) {
                             channels[channelIdx].channelTotal += Number(item.payAmount);
                             channels[channelIdx].channelCount += 1;
+
+                            if(!channels[channelIdx].cheese01 && channels[channelIdx].channelTotal > 100000) {
+                                channels[channelIdx].cheese01 = true;
+                            }
+
+                            if(channels[channelIdx].cheese01 && channels[channelIdx].channelTotal > 1000000) {
+                                channels[channelIdx].cheese02 = true;
+                            }
+
+                            if(channels[channelIdx].cheese02 && channels[channelIdx].channelTotal > 10000000) {
+                                channels[channelIdx].cheese03 = true;
+                            }
+
+                            if(channels[channelIdx].cheese03 && channels[channelIdx].channelTotal > 100000000) {
+                                channels[channelIdx].cheese04 = true;
+                            }
                             
                             yearExist = channels[channelIdx].yearData.some(data => data.year === Number(item.purchaseDate.split('-')[0]));
                             if(!yearExist) {
@@ -126,8 +146,19 @@ function makeList(channels) {
     let html = "";
 
     for(const channel of channels) {
-        html += `<button onclick="getChannelHistory('${channel.channelId}');">
-                    <img src="${channel.channelImageUrl}" />
+        html += `<button onclick="getChannelHistory('${channel.channelId}');">`;
+
+        if(channel.cheese04) {
+            html += `<img id="cheeseImg" src="https://ssl.pstatic.net/static/nng/glive/icon/cheese04.png">`;
+        } else if(channel.cheese03) {
+            html += `<img id="cheeseImg" src="https://ssl.pstatic.net/static/nng/glive/icon/cheese03.png">`;
+        } else if(channel.cheese02) {
+            html += `<img id="cheeseImg" src="https://ssl.pstatic.net/static/nng/glive/icon/cheese02.png">`;
+        } else if(channel.cheese01) {
+            html += `<img id="cheeseImg" src="https://ssl.pstatic.net/static/nng/glive/icon/cheese01.png">`;
+        }
+
+        html += `   <img src="${channel.channelImageUrl}" />
                     <p>${channel.channelName}</p>
                 </button>`;
     }
