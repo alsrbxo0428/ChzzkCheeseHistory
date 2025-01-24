@@ -143,6 +143,22 @@ function readFile(event) {
 }
 
 function makeList(channels) {
+    let sortType = document.querySelector("input[name='sortType']:checked")?.value;
+
+    if(sortType === 'total') {
+        channels.sort((a, b) => {
+            if(a.channelTotal > b.channelTotal) return -1;
+            if(a.channelTotal < b.channelTotal) return 1;
+            return 0;
+        });
+    } else if(sortType === 'name') {
+        channels.sort((a, b) => {
+            if(a.channelName < b.channelName) return -1;
+            if(a.channelName > b.channelName) return 1;
+            return 0;
+        });
+    }
+    
     let html = "";
 
     for(const channel of channels) {
@@ -158,8 +174,11 @@ function makeList(channels) {
             html += `<img id="cheeseImg" src="https://ssl.pstatic.net/static/nng/glive/icon/cheese01.png">`;
         }
 
-        html += `   <img src="${channel.channelImageUrl}" />
+        html += `   <span>
+                        <img src="${channel.channelImageUrl}" />
+                    </span>
                     <p>${channel.channelName}</p>
+                    <p>${Number(channel.channelTotal).toLocaleString("ko-KR")}원</p>
                 </button>`;
     }
 
@@ -167,11 +186,12 @@ function makeList(channels) {
 }
 
 function getChannelHistory(channelId) {
+    let channelInfoYear = '';
     let channel = channels.find(channel => channel.channelId === channelId);
-
+    
+    document.getElementById("channelHistory").style.display = "block";
     document.getElementById("channelInfo").innerText = `${channel.channelName} 총 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원 (${channel.channelCount}회)`;
 
-    let channelInfoYear = '';
     if(channel.yearData.length > 0) {
         let yearIdx = -1;
         for(let option of document.getElementById("searchYear").children) {
@@ -241,6 +261,7 @@ function renderMonthlyChart(channel) {
 function makeChartDatasets(channel) {
     let datasets = [];
     let yearIdx = -1;
+
     for(let option of document.getElementById("searchYear").children) {
         yearIdx = channel.yearData.findIndex(data => data.year === Number(option.value));
         if(yearIdx !== -1) {
@@ -254,4 +275,8 @@ function makeChartDatasets(channel) {
     }
 
     return datasets;
+}
+
+function changeSortType() {
+    document.getElementById("channelList").innerHTML = makeList(channels);
 }
