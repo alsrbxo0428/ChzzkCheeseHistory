@@ -3,11 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>스트리머별 치즈 후원 내역 확인</title>
-    <link rel="stylesheet" href="./ChzzkCheeseHistory.css">
+    <title>치지직 스트리머 별 후원 내역</title>
+    <link rel="stylesheet" href="./css/ChzzkCheeseHistory.css">
+</head>
+<body>
+    <div id="root">
+        <header class="header_container">
+            <div id="header">
+                <h3 class="m0 mt5 mb5 ml10">치지직 스트리머 별 후원 내역</h3>
+            </div>
+        </header>
     
-    <!-- 치지직 파비콘 이미지 -->
-    <link rel="icon" type="image/png" href="https://ssl.pstatic.net/static/nng/glive/icon/favicon.png">
+        <div id="discriptions">
+            <section>
+                <div class="content">
+                    <div class="innerLayout">
+                        <div class="wrapper">
+                            <div id="guide">
+                                <div class="form_wrapper">
+                                    <h2 class="form_title">
+                                        <em>후원 내역</em>
+                                        확인하기
+                                    </h2>
+                                    <ol class="guide_list">
+                                        <li class="guide_item">
+                                            <div class="guide_order">1</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">후원 내역을 확인하고 싶은 계정으로 네이버(치지직) 사이트에 로그인 하세요.</span>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <div class="guide_order">2</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">가져올 후원 내역의 연도와 데이터 개수를 입력합니다.</span>
+                                                <div class="guide_info">기본 2025년, 10,000개</div>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <div class="guide_order">3</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">후원 내역 버튼을 클릭하여 새 창으로 후원 내역 페이지를 열어줍니다.</span>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <div class="guide_order">4</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">후원 내역 페이지에서 컨트롤 + S를 눌러 후원 내역 JSON 파일을 저장합니다.</span>
+                                                <div class="guide_info">저장 후 후원 내역 페이지는 닫아도 됩니다.</div>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <div class="guide_order">5</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">파일 선택 버튼을 클릭하여 저장한 파일을 등록합니다.</span>
+                                                <div class="guide_info">JSON 파일은 한 번에 여러 개 등록 가능합니다.</div>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <div class="guide_order">6</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">생성된 스트리머 목록에서 확인하고 싶은 스트리머를 클릭합니다.</span>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <div class="guide_order">7</div>
+                                            <div class="guide_info_area">
+                                                <span class="guide_text">생성된 후원 내역을 확인하세요.</span>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <div id="comment">
+                                <div class="form_wrapper">
+                                    <h2 class="form_title">COMMENT</h2>
+                                    <ul class="guide_list">
+                                        <li class="guide_item">개인적으로 각 스트리머 별 치즈 사용 내역을 확인하고 싶어서 취미로 만든 페이지입니다.</li>
+                                        <li class="guide_item">해당 페이지는 치지직의 치즈 후원 내역을 연, 월, 일 별로 정리하여 볼 수 있도록 제작했습니다.</li>
+                                        <li class="guide_item">
+                                            <a href="https://game.naver.com/profile#cash" target="_blank" rel=""><img src="./images/favicon.png" height="80px"></a>
+                                            <div class="guide_area">
+                                                <h2 class="guide_text">네이버 게임 프로필</h2>
+                                                <div class="guide_info">치즈 후원 내역의 상세 정보를 확인하고 싶으신 분은<br>왼쪽 이미지를 클릭하셔서 네이버 게임 프로필 페이지로 이동하시기 바랍니다.</div>
+                                            </div>
+                                        </li>
+                                        <li class="guide_item">
+                                            <a href="https://github.com/alsrbxo0428/ChzzkCheeseHistory" target="_blank" rel=""><img src="./images/github_icon.png" height="80px"></a>
+                                            <div class="guide_area">
+                                                <h2 class="guide_text">ChzzkCheeseHistory</h2>
+                                                <div class="guide_info">해당 페이지의 소스 코드를 확인하고 싶으신 분은<br>왼쪽 이미지를 클릭하셔서 깃허브의 ChzzkCheeseHistory Repository 페이지로 이동하시기 바랍니다.</div>
+                                            </div>
+                                        </li>
+                                        <li style="margin-top: 25px;"><h1>해당 페이지의 디자인을 수정중입니다. 레이아웃이 이상하게 보일 수 있습니다.</h1></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="history">
+            <section>
+                <div class="content">
+                    <div class="innerLayout">
+                        <div class="history">
+                            <ul class="history_ul">
+                                <li>
+                                    <header class="form_header">
+                                        <h2 class="form_title">후원 내역</h2>
+                                        <div class="form_box_header">
+                                            <div class="form_box_button">
+                                                <div class="selectbox_container">
+                                                    <input type="hidden" id="searchYear" value="2025" />
+                                                    <button type="button" class="selectbox_component" onclick="selectboxToggle();">
+                                                        <span class="selectbox_inner">
+                                                            2025년
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+                                                                <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                    <ul class="selectbox_layer" style="display: none;">
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgSearchYear(2023);">2023년</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgSearchYear(2024);">2024년</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgSearchYear(2025);">2025년</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="search_wrap">
+                                                    <div class="search_wrapper">
+                                                        <div class="search_box">
+                                                            <input type="text" id="size" value="10000" maxlength="5" onchange="chgUrl();" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form_button">
+                                                    <button class="button_container" onclick="openHistory();">조회</button>
+                                                </div>
+                                            </div>
+                                            <a href="https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=10000&searchYear=2025" id="apiLink" target="_blank"></a>
+        
+                                            <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple />
+                                            <span id="fileList"></span>
+                                        </div>
+                                    </header>
+                                </li>
+                                <li>
+                                    <div class="form_wrapper">
+                                        <div id="output">
+                                            <div id="totalContainer">
+                                                <h2 id="totalPayAmount">전체 후원 금액 : 0원</h2>
+                                                <ul id="sortUl" onchange="changeSortType();">
+                                                    <li><label for="sortTotal"><input type="radio" id="sortTotal" name="sortType" value="total" checked />후원금액순</label></li>
+                                                    <li><label for="sortName"><input type="radio" id="sortName" name="sortType" value="name" />닉네임순</label></li>
+                                                </ul>
+                                            </div>
+                                            <div id="channelList">
+                                                
+                                            </div>
+                                            <div id="channelHistory" style="display: none;">
+                                                <h3 id="channelInfo"></h3>
+                                                <ul id="channelInfoYear"></ul>
+                                                <canvas id="monthlyChart" height="100px"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
     
     <!-- chart cdn -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js">
@@ -17,65 +193,6 @@
             Chart.register(Colors);
         });
     </script>
-</head>
-<body>
-    <h1>스트리머별 치즈 후원 내역 확인</h1>
-
-    <div id="discriptions">
-        <p>개인적으로 각 스트리머별 치즈 사용 내역을 확인하고 싶어 만든 페이지입니다.</p>
-        <p>치지직의 후원 내역 JSON 데이터를 활용하여 연도별, 월별 치즈 후원 금액 합계와 횟수를 그래프로 표출하는 기능입니다.</p>
-        <p>상세내역을 확인하고 싶으신 분은 아래 버튼을 클릭하여 치지직의 치즈 사용 내역 페이지로 이동해주시기 바랍니다.</p>
-        <button onclick="openProfile();">치지직 치즈 사용 내역 페이지</button>
-        <a href="https://game.naver.com/profile#cash" id="profileUrl" target="_blank"></a>
-    </div>
-
-    <div class="mb20" id="discriptions">
-        <h3>사용방법</h3>
-        <ol>
-            <li>먼저 네이버에서 로그인을 합니다.</li>
-            <li>아래 연도와 가져올 후원내역 데이터 개수를 입력합니다.<span>(기본 2025년, 10,000개)</span></li>
-            <li>후원내역 버튼을 클릭하여 새창으로 후원내역 페이지를 열어줍니다.</li>
-            <li>후원내역 페이지에서 컨트롤 + S 를 눌러 후원내역 JSON 파일을 저장합니다.<span>(저장 후 후원내역 페이지는 닫아도 됩니다.)</span></li>
-            <li>파일선택 버튼을 클릭하여 저장한 파일을 등록합니다.<span>(JSON 파일은 한번에 여러개 등록 가능합니다.)</span></li>
-            <li>하단의 스트리머 목록에서 확인하고 싶은 스트리머를 클릭합니다.</li>
-            <li>하단의 그래프를 확인하세요.</li>
-        </ol>
-    </div>
-
-    <select id="searchYear" onchange="chgUrl();">
-        <option value="2023">2023년</option>
-        <option value="2024">2024년</option>
-        <option value="2025" selected>2025년</option>
-        <option value="2026">2026년</option>
-    </select>
-    <input type="text" id="size" value="10000" maxlength="5" onchange="chgUrl();" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')" />
-    <button onclick="openHistory();">후원내역</button>
-    <a href="https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=10000&searchYear=2025" id="apiLink" target="_blank"></a>
-
-    <br />
-    <br />
-
-    <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple />
-    <span id="fileList"></span>
-
-    <div class="mt20" id="output">
-        <div id="totalContainer">
-            <h2 id="totalPayAmount">전체 후원 금액 : 0원</h2>
-            <ul id="sortUl" onchange="changeSortType();">
-                <li><label for="sortName"><input type="radio" id="sortName" name="sortType" value="name" checked />닉네임순</label></li>
-                <li><label for="sortTotal"><input type="radio" id="sortTotal" name="sortType" value="total" />후원금액순</label></li>
-            </ul>
-        </div>
-        <div id="channelList">
-
-        </div>
-        <div id="channelHistory" style="display: none;">
-            <h3 class="mb5" id="channelInfo"></h3>
-            <ul id="channelInfoYear"></ul>
-            <canvas class="mt20" id="monthlyChart" height="100px"></canvas>
-        </div>
-    </div>
-
-    <script src="./ChzzkCheeseHistory.js"></script>
+    <script src="./js/ChzzkCheeseHistory.js"></script>
 </body>
 </html>
