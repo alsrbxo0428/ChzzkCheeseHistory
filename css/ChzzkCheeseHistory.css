@@ -383,12 +383,21 @@ strong {
     align-items: center;
     border-radius: 5px;
     display: inline-flex;
-    font-size: 13px;
+    font-size: 16px;
     justify-content: center;
     line-height: 18px;
     padding: 0 15px;
     position: relative;
     vertical-align: top;
     margin-left: 10px;
+}
+
+.button_container.button_container_light {
+    background-color: rgba(78, 65, 219, .15);
+    color: #4e41db;
+}
+
+.button_container:hover {
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1));
 }
 /* class */

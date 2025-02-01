@@ -25,9 +25,9 @@ function selectboxToggle() {
 function chgSearchYear(year) {
     document.getElementById("searchYear").value = year;
     document.getElementsByClassName("selectbox_inner")[0].innerHTML = ` ${year}년
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-                                                                            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-                                                                        </svg>`;
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+        </svg>`;
 
     selectboxToggle();
     chgUrl();
@@ -60,12 +60,17 @@ function openHistory() {
     document.getElementById("apiLink").click();
 }
 
+function addFile() {
+    document.getElementById("jsonFileInput").click();
+}
+
 function changeSortType() {
     document.getElementById("channelList").innerHTML = makeList(channels);
 }
 
 async function readFile(event) {
     const files = event.target.files;
+    document.getElementById("fileList").innerText = `등록된 파일: ${files.length}건`;
     const cheeseDataArr = await processFiles(files);
     let totalPayAmount = 0;
     
