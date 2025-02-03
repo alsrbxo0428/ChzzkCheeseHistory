@@ -164,7 +164,9 @@ strong {
     margin-top: 10px;
 }
 
-
+#channelInfoYear li+li{
+    margin-top: 5px;
+}
 /* id */
 
 /* class */
@@ -196,6 +198,7 @@ strong {
 }
 
 .form_header {
+    align-items: center;
     display: flex;
     gap: 0 12px;
     width: 100%;
@@ -415,5 +418,11 @@ strong {
 
 .button_container:hover {
     background-image: linear-gradient(0deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1));
+}
+
+.form_button_ul {
+    align-items: center;
+    display: flex;
+    gap: 10px;
 }
 /* class */

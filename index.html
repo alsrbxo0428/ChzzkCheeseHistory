@@ -154,9 +154,15 @@
                                                 </div>
                                                 
                                                 <div class="form_button">
-                                                    <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
-                                                    <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple style="display: none;" />
-                                                    <span id="fileList"></span>
+                                                    <ul class="form_button_ul">
+                                                        <li>
+                                                            <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                                            <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple style="display: none;" />
+                                                        </li>
+                                                        <li>
+                                                            <p id="fileList"></p>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
