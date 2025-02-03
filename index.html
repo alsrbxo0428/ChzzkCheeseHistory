@@ -121,7 +121,7 @@
                                                     <input type="hidden" id="searchYear" value="2025" />
                                                     <button type="button" class="selectbox_component" onclick="selectboxToggle();">
                                                         <span class="selectbox_inner">
-                                                            2025년
+                                                            0000년
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
                                                                 <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
                                                             </svg>
@@ -138,7 +138,6 @@
                                                             <button type="button" class="selectbox_option" onclick="chgSearchYear(2025);">2025년</button>
                                                         </li>
                                                     </ul>
-                                                
                                                 </div>
                                                 <div class="search_wrap">
                                                     <div class="search_wrapper">
@@ -186,10 +185,130 @@
                                 </li>
                                 <li class="history_li">
                                     <div class="form_wrapper" id="channelHistoryWrap" style="display: none;">
-                                        <div id="channelHistory">
+                                    <!-- <div class="form_wrapper" id="channelHistoryWrap"> -->
+                                        <div class="tab_container">
+                                            <ul class="tab_list">
+                                                <li class="tab_item">
+                                                    <button class="tab_button on" id="graphBtn" onclick="chgView('Graph');">
+                                                        <span class="tab_box">
+                                                            <span class="tab_text">그래프</span>
+                                                        </span>
+                                                    </button>
+                                                </li>
+                                                <li class="tab_item">
+                                                    <button class="tab_button" id="calendarBtn" onclick="chgView('Calendar');">
+                                                        <span class="tab_box">
+                                                            <span class="tab_text">달력</span>
+                                                        </span>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <div class="selectbox">
+                                                <div class="selectbox_container">
+                                                    <button class="selectbox_component" onclick="selectboxToggle2();">
+                                                        <span class="selectbox_inner">
+                                                            0000년
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+                                                                <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                    <ul class="selectbox_layer" style="display: none;">
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendatYear(2023);">2023년</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendatYear(2024);">2024년</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendatYear(2025);">2025년</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="selectbox_container">
+                                                    <button class="selectbox_component" onclick="selectboxToggle3();">
+                                                        <span class="selectbox_inner">
+                                                            0월
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+                                                                <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                    <ul class="selectbox_layer" style="display: none;">
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(1);">1월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(2);">2월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(3);">3월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(4);">4월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(5);">5월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(6);">6월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(7);">7월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(8);">8월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(9);">9월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(10);">10월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(11);">11월</button>
+                                                        </li>
+                                                        <li class="selectbox_item">
+                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(12);">12월</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <button type="button" id="button" class="button_container" onclick="chgCalendar();" style="margin-left: 0px;">
+                                                    <span class="button_inner">조회</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- <div id="channelHistory" style="display: none;"> -->
+                                        <div id="channelHistory" style="display: block;">
                                             <h3 id="channelInfo"></h3>
                                             <ul id="channelInfoYear"></ul>
                                             <canvas id="monthlyChart" height="100px"></canvas>
+                                        </div>
+                                        <!-- <div id="channelHistoryCalendar" style="display: block;"> -->
+                                        <div id="channelHistoryCalendar" style="display: none;">
+                                            <ul>
+                                                <li>
+                                                    <div class="calendar_header">
+                                                        <button class="button_container_fit" onclick="goPrev();"><h2><</h2></button>
+                                                        <h2 class="calendarDate">0000년 0월</h2>
+                                                        <button class="button_container_fit" onclick="goNext();"><h2>></h2></button>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="calendar_container">
+                                                        <div class="days">
+                                                            <div class="day"><h4>SUN</h4></div>
+                                                            <div class="day"><h4>MON</h4></div>
+                                                            <div class="day"><h4>TUE</h4></div>
+                                                            <div class="day"><h4>WED</h4></div>
+                                                            <div class="day"><h4>THU</h4></div>
+                                                            <div class="day"><h4>FRI</h4></div>
+                                                            <div class="day"><h4>SAT</h4></div>
+                                                        </div>
+                                                        <div class="dates"></div>
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </li>

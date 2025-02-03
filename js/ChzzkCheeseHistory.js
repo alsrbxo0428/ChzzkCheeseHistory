@@ -1,13 +1,30 @@
 var channels = [];
-var selectboxFlag = false;
-var monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-var yearArr = [2023, 2024, 2025];
+var selectboxFlag = true;
+var selectboxFlag2 = true;
+var selectboxFlag3 = true;
+const monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const yearArr = [2023, 2024, 2025];
+var date = new Date();
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+var calendarDate = `${year}-${month}`;
+
+chgSearchYear(year);
+chgCalendarYear(year);
+chgCalendarMonth(month);
+chgCalendarDate(year, month);
 
 document.getElementsByClassName("selectbox_component")[0].addEventListener("focus", handleFocusChange);
 document.getElementsByClassName("selectbox_component")[0].addEventListener("blur", handleFocusChange);
 
-document.getElementById("size").addEventListener("focus", handleFocusChange2);
-document.getElementById("size").addEventListener("blur", handleFocusChange2);
+document.getElementsByClassName("selectbox_component")[1].addEventListener("focus", handleFocusChange2);
+document.getElementsByClassName("selectbox_component")[1].addEventListener("blur", handleFocusChange2);
+
+document.getElementsByClassName("selectbox_component")[2].addEventListener("focus", handleFocusChange3);
+document.getElementsByClassName("selectbox_component")[2].addEventListener("blur", handleFocusChange3);
+
+document.getElementById("size").addEventListener("focus", handleFocusChange4);
+document.getElementById("size").addEventListener("blur", handleFocusChange4);
 
 function openProfile() {
     document.getElementById("profileUrl").click();
@@ -15,11 +32,6 @@ function openProfile() {
 
 function chgUrl() {
     document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=${document.getElementById("size").value}&searchYear=${document.getElementById("searchYear").value}`;
-}
-
-function selectboxToggle() {
-    selectboxFlag = !selectboxFlag;
-    document.getElementsByClassName("selectbox_layer")[0].style.display = selectboxFlag ? "block" : "none";
 }
 
 function chgSearchYear(year) {
@@ -33,6 +45,26 @@ function chgSearchYear(year) {
     chgUrl();
 }
 
+function chgCalendarYear(localYear) {
+    document.getElementsByClassName("selectbox_inner")[1].innerHTML = ` ${localYear}년
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+        </svg>`;
+
+    year = localYear;
+    selectboxToggle2();
+}
+
+function chgCalendarMonth(localMonth) {
+    document.getElementsByClassName("selectbox_inner")[2].innerHTML = ` ${localMonth}월
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+        </svg>`;
+
+    month = localMonth;
+    selectboxToggle3();
+}
+
 function handleFocusChange(event) {
     if (event.type === "focus") {
         document.getElementsByClassName("selectbox_component")[0].classList.add("selectbox_is_focused");
@@ -43,12 +75,50 @@ function handleFocusChange(event) {
         }, 100);
     }
 }
+
 function handleFocusChange2(event) {
+    if (event.type === "focus") {
+        document.getElementsByClassName("selectbox_component")[1].classList.add("selectbox_is_focused");
+    } else if (event.type === "blur") {
+        document.getElementsByClassName("selectbox_component")[1].classList.remove("selectbox_is_focused");
+        setTimeout(function() {
+            if(selectboxFlag2) selectboxToggle2();
+        }, 100);
+    }
+}
+
+function handleFocusChange3(event) {
+    if (event.type === "focus") {
+        document.getElementsByClassName("selectbox_component")[2].classList.add("selectbox_is_focused");
+    } else if (event.type === "blur") {
+        document.getElementsByClassName("selectbox_component")[2].classList.remove("selectbox_is_focused");
+        setTimeout(function() {
+            if(selectboxFlag3) selectboxToggle3();
+        }, 100);
+    }
+}
+
+function handleFocusChange4(event) {
     if (event.type === "focus") {
         document.getElementById("size").closest(".search_wrapper").classList.add("search_is_focused");
     } else if (event.type === "blur") {
         document.getElementById("size").closest(".search_wrapper").classList.remove("search_is_focused");
     }
+}
+
+function selectboxToggle() {
+    selectboxFlag = !selectboxFlag;
+    document.getElementsByClassName("selectbox_layer")[0].style.display = selectboxFlag ? "block" : "none";
+}
+
+function selectboxToggle2() {
+    selectboxFlag2 = !selectboxFlag2;
+    document.getElementsByClassName("selectbox_layer")[1].style.display = selectboxFlag2 ? "block" : "none";
+}
+
+function selectboxToggle3() {
+    selectboxFlag3 = !selectboxFlag3;
+    document.getElementsByClassName("selectbox_layer")[2].style.display = selectboxFlag3 ? "block" : "none";
 }
 
 function openHistory() {
@@ -66,6 +136,88 @@ function addFile() {
 
 function changeSortType() {
     document.getElementById("channelList").innerHTML = makeList(channels);
+}
+
+function chgView(type) {
+    if(type === 'Graph') {
+        document.getElementById("graphBtn").classList.add("on");
+        document.getElementById("calendarBtn").classList.remove("on");
+        document.getElementById("channelHistory").style.display = "block";
+        document.getElementById("channelHistoryCalendar").style.display = "none";
+    } else if(type === 'Calendar') {
+        document.getElementById("graphBtn").classList.remove("on");
+        document.getElementById("calendarBtn").classList.add("on");
+        document.getElementById("channelHistory").style.display = "none";
+        document.getElementById("channelHistoryCalendar").style.display = "block";
+    }
+}
+
+function chgCalendarDate(year, month) {
+    document.getElementsByClassName("calendarDate")[0].innerText = `${year}년 ${month}월`;
+    setCalendar();
+}
+
+function chgCalendar() {
+    chgCalendarDate(year, month);
+}
+
+function goPrev() {
+    month--;
+    if(month <= 0) month = 12, year -= 1;
+    chgCalendar();
+}
+
+function goNext() {
+    month++;
+    if(month > 12) month = 1, year++;
+    chgCalendar();
+}
+
+function setCalendar() {
+    const prevLast = new Date(year, month - 1, 0);
+    const thisLast = new Date(year, month, 0);
+
+    const PLDate = prevLast.getDate();
+    const PLDay = prevLast.getDay();
+
+    const TLDate = thisLast.getDate();
+    const TLDay = thisLast.getDay();
+
+    const prevDates = [];
+    const thisDates = [...Array(TLDate + 1).keys()].slice(1);
+    const nextDates = [];
+
+    if(PLDay !== 6) {
+        for(let i = 0; i < PLDay + 1; i++) {
+            prevDates.unshift(PLDate - i);
+        }
+    }
+
+    for(let i = 1; i < 7 - TLDay; i++) {
+        nextDates.push(i);
+    }
+
+    const dates = prevDates.concat(thisDates, nextDates);
+
+    const firstDateIndex = dates.indexOf(1);
+    const lastDateIndex = dates.lastIndexOf(TLDate);
+
+    dates.forEach((date, i) => {
+        const condition = i >= firstDateIndex && i < lastDateIndex + 1 ? 'this' : 'other';
+        dates[i] = `<div class="date"><span class="${condition}">${date}</span></div>`;
+    });
+    
+    document.querySelector(".dates").innerHTML = dates.join('');
+    
+    const today = new Date();
+    if(month === today.getMonth() + 1 && year === today.getFullYear()) {
+        for(let date of document.querySelectorAll('.this')) {
+            if(+date.innerText === today.getDate()) {
+                date.classList.add('today');
+                break;
+            }
+        }
+    }
 }
 
 async function readFile(event) {
