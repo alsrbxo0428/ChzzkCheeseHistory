@@ -103,6 +103,17 @@ strong {
     top: 0;
 }
 
+#totalContainer {
+    display: flex;
+}
+
+#totalContainer #sortUl {
+    align-items: center;
+    display: flex;
+    gap: 15px;
+    margin-left: 15px;
+}
+
 #channelList {
     display: flex;
     flex-wrap: wrap;
@@ -148,6 +159,12 @@ strong {
     display: flex;
     position: absolute;
 }
+
+#channelInfoYear {
+    margin-top: 10px;
+}
+
+
 /* id */
 
 /* class */
@@ -221,7 +238,6 @@ strong {
     background-color: #222;
     border-radius: 50%;
     color: #fff;
-    -ms-flex: none;
     flex: none;
     font-size: 11px;
     font-weight: 900;
@@ -257,11 +273,11 @@ strong {
     width: 100%;
 }
 
-.history_ul {
+.history .history_ul {
     width: 100%;
 }
 
-.history ul li+li {
+.history .history_ul .history_li+.history_li {
     padding-top: 20px;
 }
 

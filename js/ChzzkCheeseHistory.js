@@ -75,7 +75,7 @@ async function readFile(event) {
     let totalPayAmount = 0;
     
     channels = [];
-    document.getElementById("channelHistory").style.display = "none";
+    document.getElementById("channelHistoryWrap").style.display = "none";
 
     if(cheeseDataArr) {
         cheeseDataArr.sort((a, b) => {
@@ -252,7 +252,7 @@ function getChannelHistory(channelId) {
     let channelInfoYear = '';
     let channel = channels.find(channel => channel.channelId === channelId);
     
-    document.getElementById("channelHistory").style.display = "block";
+    document.getElementById("channelHistoryWrap").style.display = "block";
     document.getElementById("channelInfo").innerText = `${channel.channelName} 총 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원 (${channel.channelCount}회)`;
 
     if(channel.yearData.length > 0) {
