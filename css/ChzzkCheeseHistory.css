@@ -115,6 +115,7 @@ strong {
 }
 
 #channelList {
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -168,13 +169,29 @@ strong {
     margin-top: 5px;
 }
 
-#channelHistoryCalendar {
-    text-align: center;
+#channelHistoryCalendar #channelHistoryCalendarUl #channelHistoryCalendarheaderLi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+}
+
+@media(max-width: 980px) {
+    #channelHistoryCalendar .calendar_month_total h3 {
+        display: none;
+    }
 }
 
 #channelHistoryCalendar .calendar_header {
-    display: inline-flex;
+    display: flex;
     gap: 20px;
+    align-items: center;
+}
+
+#channelHistoryCalendar .cheese_history ul {
+    display: flex;
+    gap: 13px;
+    align-items: center;
 }
 /* id */
 
@@ -407,7 +424,6 @@ strong {
     color: #fff;
     height: 40px;
     min-width: 76px;
-    padding: 0 20px;
     align-items: center;
     border-radius: 5px;
     display: inline-flex;
@@ -427,15 +443,10 @@ strong {
 .button_container_fit {
     background-color: #4e41db;
     color: #fff;
-    padding: 0 20px;
-    align-items: center;
     border-radius: 5px;
-    display: inline-flex;
     font-size: 16px;
-    justify-content: center;
     line-height: 18px;
-    padding: 0 15px;
-    position: relative;
+    padding: 5px 15px;
     vertical-align: top;
 }
 
@@ -455,7 +466,7 @@ strong {
 }
 
 .tab_container {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     display: flex;
     gap: 0 30px;
     justify-content: space-between;
@@ -463,7 +474,7 @@ strong {
     width: 100%;
 }
 
-.tab_container:before {
+.tab_container::before {
     background-color: #ddd;
     bottom: 0;
     content: "";
@@ -484,7 +495,7 @@ strong {
     vertical-align: top;
 }
 
-.tab_list:before {
+.tab_list::before {
     border: solid #ddd;
     border-radius: inherit;
     border-width: 1px 1px 0;
@@ -549,10 +560,13 @@ strong {
 
 .calendar_container {
     margin-top: 20px;
-    text-align: center;
 }
 
 .calendar_container .days .day:first-child {
+    color: red;
+}
+
+.calendar_container .dates tr td:first-child .this h4 {
     color: red;
 }
 
@@ -560,26 +574,76 @@ strong {
     color: blue;
 }
 
-.days, .dates {
-    display: inline-flex;
+.calendar_container .dates tr td:last-child .this h4 {
+    color: blue;
+}
+
+.calendar {
     width: 100%;
-    justify-content: space-around;
-    /* border:1px solid #d9d9d9; */
+    height: 600px;
+}
+
+.days {
+    text-align: center;
+}
+
+.days th {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
 }
 
 .days .day {
-    width: calc(100% / 7);
-    /* border-right:1p1x solid #d9d9d9; */
-    padding:15px 0;
-}
-
-.days .day:last-child {
-    border-right:0;
+    padding: 15px 0;
 }
 
 .dates .date {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
     width: calc(100% / 7);
-    /* border-right:1p1x solid #d9d9d9; */
-    padding:15px 0;
+    height: calc(100% / 6);
+    vertical-align: top;
+    text-align: left;
+}
+
+.dates .date span h4 {
+    margin: 10px 0 0 10px;
+}
+
+.dates .date .date_inner {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.other {
+    color:rgba(0, 0, 0, .4);
+}
+
+.cheeseDate {
+    height: 25px;
+    position: absolute;
+}
+
+.calendar_month_total {
+    display: flex;
+    justify-content: start;
+    width: 400px;
+}
+
+.cheese_history {
+    display: flex;
+    justify-content: end;
+    width: 400px;
+}
+
+.cheese_history_button {
+    height: 30px;
+}
+
+.today {
+    border: 2px solid #0feb21 !important;
+}
+
+.focus_day {
+    border: 2px solid red !important;
 }
 /* class */
