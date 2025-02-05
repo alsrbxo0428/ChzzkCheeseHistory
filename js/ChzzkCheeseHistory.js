@@ -250,7 +250,8 @@ function rendarCalendar(focusDay) {
                     channel.cheese04 && channel.cheeseDate04 === makeDate(year, month, date) ? '<img src="./images/cheese04.png" class="cheeseDate">' :
                     channel.cheese03 && channel.cheeseDate03 === makeDate(year, month, date) ? '<img src="./images/cheese03.png" class="cheeseDate">' :
                     channel.cheese02 && channel.cheeseDate02 === makeDate(year, month, date) ? '<img src="./images/cheese02.png" class="cheeseDate">' :
-                    channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : ''
+                    channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : 
+                    channel.firstCheeseDate === makeDate(year, month, date) ? '<img src="./images/fan_03.png" class="cheeseDate">' : ''
                 ) : ''}
             </h4></span>`;
 
@@ -275,9 +276,9 @@ function rendarCalendar(focusDay) {
     
     const today = new Date();
     if(month === today.getMonth() + 1 && year === today.getFullYear()) {
-        for(let date of document.querySelectorAll('.date')) {
-            if(+date.innerText === today.getDate()) {
-                date.classList.add('today');
+        for(let date of document.querySelectorAll('.date .this')) {
+            if(Number(date.innerText) === today.getDate()) {
+                date.closest(".date").classList.add('today');
                 break;
             }
         }
@@ -336,6 +337,7 @@ async function readFile(event) {
                     cheeseDate03: null,
                     cheese04: false,
                     cheeseDate04: null,
+                    firstCheeseDate: null,
                     onedayMaxCheese: 0,
                     onedayMaxCheeseDate: null,
                     yearData: []
@@ -345,6 +347,9 @@ async function readFile(event) {
 
             channelData.channelTotal += payAmount;
             channelData.channelCount++;
+
+            if(!channelData.firstCheeseDate) channelData.firstCheeseDate = splitedPurchaseDate;
+            else if(!channelData.firstCheeseDate.localeCompare(splitedPurchaseDate)) channelData.firstCheeseDate = splitedPurchaseDate;
 
             if(!channelData.cheese01 && channelData.channelTotal > 100_000) {
                 channelData.cheese01 = true;
