@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/ChzzkCheeseHistory.css">
     <link rel="icon" type="image/png" href="./images/cheese_favicon.png">
 </head>
+<!-- <body style="overflow: hidden; position: fixed; top: 0; width: 100%; height: 100%;"> -->
 <body>
     <div id="root">
         <header class="header_container">
@@ -23,8 +24,7 @@
                             <div id="guide">
                                 <div class="form_wrapper">
                                     <h2 class="form_title">
-                                        <em>후원 내역</em>
-                                        확인하기
+                                        <em>후원 내역</em> 확인하기
                                     </h2>
                                     <ol class="guide_list">
                                         <li class="guide_item">
@@ -96,7 +96,6 @@
                                                 <div class="guide_info">해당 페이지의 소스 코드를 확인하고 싶으신 분은<br>왼쪽 이미지를 클릭하셔서 깃허브의 ChzzkCheeseHistory Repository 페이지로 이동하시기 바랍니다.</div>
                                             </div>
                                         </li>
-                                        <li class="guide_item"><h1>해당 페이지의 디자인을 수정중입니다.<br>레이아웃이 이상하게 보일 수 있습니다.</h1></li>
                                     </ul>
                                 </div>
                             </div>
@@ -114,57 +113,62 @@
                             <ul class="history_ul">
                                 <li class="history_li">
                                     <header class="form_header">
-                                        <h2 class="form_title">후원 내역</h2>
-                                        <div class="form_box_header">
-                                            <div class="form_box_button">
-                                                <div class="selectbox_container">
-                                                    <input type="hidden" id="searchYear" value="2025" />
-                                                    <button type="button" class="selectbox_component" onclick="selectboxToggle();">
-                                                        <span class="selectbox_inner">
-                                                            0000년
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-                                                                <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul class="selectbox_layer">
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgSearchYear(2023);">2023년</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgSearchYear(2024);">2024년</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgSearchYear(2025);">2025년</button>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="search_wrap">
-                                                    <div class="search_wrapper">
-                                                        <div class="search_box">
-                                                            <input type="text" id="size" value="10000" maxlength="5" onchange="chgUrl();" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                        <div class="form_header_inner">
+                                            <h2 class="form_title">후원 내역 조회</h2>
+                                            <div class="form_box_header">
+                                                <div class="form_box_button">
+                                                    <div class="selectbox_container">
+                                                        <input type="hidden" id="searchYear" value="2025" />
+                                                        <button type="button" class="selectbox_component" onclick="selectboxToggle();">
+                                                            <span class="selectbox_inner">
+                                                                0000년
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+                                                                    <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </button>
+                                                        <ul class="selectbox_layer">
+                                                            <li class="selectbox_item">
+                                                                <button type="button" class="selectbox_option" onclick="chgSearchYear(2023);">2023년</button>
+                                                            </li>
+                                                            <li class="selectbox_item">
+                                                                <button type="button" class="selectbox_option" onclick="chgSearchYear(2024);">2024년</button>
+                                                            </li>
+                                                            <li class="selectbox_item">
+                                                                <button type="button" class="selectbox_option" onclick="chgSearchYear(2025);">2025년</button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="search_wrap">
+                                                        <div class="search_wrapper">
+                                                            <div class="search_box">
+                                                                <input type="text" id="size" value="10000" maxlength="5" onchange="chgUrl();" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                
-                                                <div class="form_button">
-                                                    <button class="button_container" onclick="openHistory();">조회</button>
-                                                    <a href="https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=10000&searchYear=2025" id="apiLink" target="_blank"></a>
-                                                </div>
-                                                
-                                                <div class="form_button">
-                                                    <ul class="form_button_ul">
-                                                        <li>
-                                                            <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
-                                                            <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple style="display: none;" />
-                                                        </li>
-                                                        <li>
-                                                            <p id="fileList"></p>
-                                                        </li>
-                                                    </ul>
+                                                    
+                                                    <div class="form_button">
+                                                        <button class="button_container" onclick="openHistory();">조회</button>
+                                                        <a href="https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=10000&searchYear=2025" id="apiLink" target="_blank"></a>
+                                                    </div>
+                                                    
+                                                    <div class="form_button">
+                                                        <ul class="form_button_ul">
+                                                            <li>
+                                                                <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                                                <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple style="display: none;" />
+                                                            </li>
+                                                            <li>
+                                                                <p id="fileList"></p>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- <div class="cookie_container">
+                                            <button class="button_container button_container_light" onclick="openManageCookie();">쿠키 관리</button>
+                                        </div> -->
                                     </header>
                                 </li>
                                 <li class="history_li">
@@ -172,10 +176,10 @@
                                         <ul id="output">
                                             <div id="totalContainer">
                                                 <h3 id="totalPayAmount">전체 후원 금액 : 0원</h3>
-                                                <ul id="sortUl" onchange="changeSortType();">
-                                                    <li><label for="sortTotal"><input type="radio" id="sortTotal" name="sortType" value="total" checked />후원금액순</label></li>
-                                                    <li><label for="sortName"><input type="radio" id="sortName" name="sortType" value="name" />닉네임순</label></li>
-                                                </ul>
+                                                <div class="radio-box" onchange="changeSortType();">
+                                                    <input type="radio" id="sortTotal" name="sortType" value="total" checked="checked"><label for="sortTotal">후원금액순</label>
+                                                    <input type="radio" id="sortName" name="sortType" value="name"><label for="sortName">닉네임순</label>
+                                                </div>
                                             </div>
                                             <div id="channelListContainer"></div>
                                         </ul>
@@ -330,5 +334,137 @@
         });
     </script>
     <script src="./js/ChzzkCheeseHistory.js"></script>
+
+    <!-- <div class="popup_dimmed"> -->
+    <div class="popup_dimmed" style="display: none;">
+        <div class="popup_container">
+            <h2 class="popup_title">쿠키 관리</h2>
+            <div class="popup_content">
+                <div class="popup_inner">
+                    <div class="content">
+                        <div class="innerLayout">
+                            <div class="wrapper" style="text-align: initial;">
+                                <div id="comment" style="padding: 0; margin: 20px 15px 20px 0;">
+                                    <div class="form_wrapper">
+                                        <h3 class="form_title">
+                                            <em>쿠키</em> 관리
+                                        </h3>
+                                        <ul class="guide_list">
+                                            <li class="guide_item">등록된 후원 내역은 JSON 파일의 데이터 목록입니다.</li>
+                                            <li class="guide_item">등록된 후원 내역에서 체크하고 저장하기를 클릭하면 해당 스트리머/연도의 내역 데이터가 쿠키로 저장됩니다.</li>
+                                            <li class="guide_item">저장된 쿠키 정보</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div id="comment" style="padding: 0; margin: 20px 0 20px 15px;">
+                                    <div class="form_wrapper">
+                                        <h3 class="form_title">
+                                            Comment
+                                        </h3>
+                                        <ul class="guide_list">
+                                            <li class="guide_item">매번 이전년도의 파일까지 등록하기 번거로워서 쿠키로 관리할 수 있도록 만들었습니다.</li>
+                                            <li class="guide_item">쿠키는 클라이언트에 저장되며, 저장된 쿠키는 30일간 유지됩니다.</li>
+                                            <li class="guide_item">해당 페이지의 개발자는 사용자의 쿠키를 수집하지 않습니다.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wrapper">
+                                <div id="guide" style="padding: 0; margin: 20px 15px 20px 0;">
+                                    <div class="form_wrapper">
+                                        <h3 class="form_title" style="text-align: initial;">등록된 후원 내역</h3>
+                                        <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
+                                            <colgroup>
+                                                <col width="50%">
+                                                <col width="40%">
+                                                <col>
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th class="">스트리머</th>
+                                                    <th class="">연도</th>
+                                                    <th class="">
+                                                        <div class="check-box">
+                                                            <label for="file_allCheck">
+                                                                <input type="checkbox" id="file_allCheck" onchange="allCheck();" />
+                                                                <div class="chkbox">
+                                                                    <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
+                                                                        <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                                        <polyline points="4 11 8 15 16 6"></polyline>
+                                                                    </svg>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="cheeseHistList">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p>등록된 파일이 없습니다.</p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="cheeseHistListBtn">
+                                            <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="guide" style="padding: 0; margin: 20px 0 20px 15px;">
+                                    <div class="form_wrapper">
+                                        <h3 class="form_title" style="text-align: initial;">저장된 쿠키 정보</h3>
+                                        <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
+                                            <colgroup>
+                                                <col width="50%">
+                                                <col width="40%">
+                                                <col>
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th class="">스트리머</th>
+                                                    <th class="">연도</th>
+                                                    <th class="">
+                                                        <div class="check-box">
+                                                            <label for="cookie_allCheck">
+                                                                <input type="checkbox" id="cookie_allCheck" onchange="allCheck();" />
+                                                                <div class="chkbox">
+                                                                    <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
+                                                                        <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                                        <polyline points="4 11 8 15 16 6"></polyline>
+                                                                    </svg>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="cheeseHistCookieList">
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="button_container" style="margin-left: 0;">저장하기</button>
+                </div>
+            </div>
+            <button class="popup_button" onclick="closeManageCookie();">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="popup_icon_close__BfB2v">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.79289 7.79289C8.18342 7.40237 8.81658 7.40237 9.20711 7.79289L22.2071 20.7929C22.5976 21.1834 22.5976 21.8166 22.2071 22.2071C21.8166 22.5976 21.1834 22.5976 20.7929 22.2071L7.79289 9.20711C7.40237 8.81658 7.40237 8.18342 7.79289 7.79289Z" fill="#2E3033"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M7.79289 22.2071C7.40237 21.8166 7.40237 21.1834 7.79289 20.7929L20.7929 7.79289C21.1834 7.40237 21.8166 7.40237 22.2071 7.79289C22.5976 8.18342 22.5976 8.81658 22.2071 9.20711L9.20711 22.2071C8.81658 22.5976 8.18342 22.5976 7.79289 22.2071Z" fill="#2E3033"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
 </body>
 </html>

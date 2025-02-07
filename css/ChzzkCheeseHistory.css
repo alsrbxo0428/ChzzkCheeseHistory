@@ -56,7 +56,6 @@ strong {
 }
 /* tag */
 
-/* id */
 #comment {
     display: flex;
     margin: 0 auto;
@@ -114,18 +113,28 @@ strong {
     margin-left: 15px;
 }
 
+#totalPayAmount {
+    margin-right: 15px;
+}
+
 #channelList {
-    margin-top: 10px;
+    /* margin-top: 10px; */
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: start;
 }
 
+#channelListContainer {
+    margin-top: 10px;
+    display: none;
+}
+
 #channelList button {
     display: inline-block;
     margin: 10px;
     border: 1px solid #ddd;
+    border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -138,27 +147,29 @@ strong {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-#channelList button span img {
+#channelList button p {
+    margin: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#channelImg {
+    border-radius: 10px;
+    background-color: white;
     display: block;
     margin: auto;
     width: 150px;
     height: 150px;
     object-fit: cover;
-    border-radius: 8px;
     overflow: hidden;
-    background-color: white;
-}
-
-#channelList button p {
-    margin: 10px 0 0;
-    font-weight: bold;
-    font-size: 14px;
+    margin: 5px;
 }
 
 #cheeseImg {
     height: 35px;
-    display: flex;
+    display: block;
     position: absolute;
+    margin: 3px 0 0 8px;
 }
 
 #channelInfoYear {
@@ -193,9 +204,11 @@ strong {
     gap: 13px;
     align-items: center;
 }
-/* id */
 
-/* class */
+.cheeseHistListBtn {
+    margin-top: 10px;
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -220,9 +233,21 @@ strong {
 }
 
 .form_header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.form_header_inner {
     align-items: center;
     display: flex;
     gap: 0 12px;
+}
+
+.form_box_button {
+    align-items: center;
+    display: flex;
+    position: relative;
     width: 100%;
 }
 
@@ -304,17 +329,6 @@ strong {
 
 .history .history_ul .history_li+.history_li {
     padding-top: 20px;
-}
-
-.form_box_header {
-    flex: none;
-}
-
-.form_box_button {
-    align-items: center;
-    display: flex;
-    position: relative;
-    width: 100%;
 }
 
 .selectbox_container {
@@ -428,6 +442,7 @@ strong {
     border-radius: 5px;
     display: inline-flex;
     font-size: 16px;
+    font-weight: 900;
     justify-content: center;
     line-height: 18px;
     padding: 0 15px;
@@ -474,7 +489,7 @@ strong {
     width: 100%;
 }
 
-.tab_container::before {
+.tab_container:before {
     background-color: #ddd;
     bottom: 0;
     content: "";
@@ -495,7 +510,7 @@ strong {
     vertical-align: top;
 }
 
-.tab_list::before {
+.tab_list:before {
     border: solid #ddd;
     border-radius: inherit;
     border-width: 1px 1px 0;
@@ -640,10 +655,166 @@ strong {
 }
 
 .today {
-    border: 2px solid #0feb21 !important;
+    border: 2px solid #4e41db !important;
 }
 
 .focus_day {
-    border: 2px solid red !important;
+    border: 2px solid #db4141 !important;
 }
-/* class */
+
+.popup_dimmed {
+    align-items: center;
+    background-color: rgba(0, 0, 0, .7);
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    padding: 50px 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 2000;
+}
+
+.popup_container {
+    word-wrap: break-word;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .05), 0 2px 8px rgba(0, 0, 0, .1);
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    min-height: 0;
+    position: relative;
+    word-break: break-all;
+    width: 80%;
+}
+
+.popup_title {
+    border-bottom: 1px solid #ebedf3;
+    flex: none;
+    line-height: 22px;
+    padding: 18px 70px 19px;
+    text-align: center;
+}
+
+.popup_content {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #f1f3f5;
+    border-radius: 0 0 15px 15px;
+}
+
+.popup_inner {
+    margin: 20px;
+    text-align: center;
+}
+
+.popup_button {
+    padding: 14px 20px 15px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.deleted_clip_popup_text {
+    color: #222;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -.5px;
+    line-height: 20px;
+    padding-left: 10px;
+    position: relative;
+    text-align: left;
+}
+
+.deleted_clip_popup_text:before {
+    background-color: #858894;
+    border-radius: 50%;
+    content: "";
+    height: 3px;
+    left: 0;
+    position: absolute;
+    top: 8px;
+    width: 3px;
+}
+
+.deleted_clip_popup_list {
+    margin-top: 6px;
+}
+
+.deleted_clip_popup_item {
+    display: inline-block;
+    font-weight: 400;
+    vertical-align: top;
+}
+
+.table_container {
+    word-wrap: break-word;
+    border: solid #ddd;
+    border-width: 1px 0;
+    color: #697183;
+    font-size: 13px;
+    line-height: 18px;
+    margin-top: 16px;
+    table-layout: fixed;
+    word-break: break-all;
+}
+
+.table_container thead th {
+    background-color: rgba(245, 246, 248, .5);
+    border-bottom: 1px solid #ddd;
+    font-weight: 400;
+    height: 40px;
+    padding: 5px;
+}
+
+.table_container tbody th, .table_container td {
+    height: 50px;
+    letter-spacing: -.5px;
+    padding: 12px 5px;
+    text-align: center;
+}
+
+.table_container tbody tr:hover {
+    background-color: rgba(245, 246, 248, .5);
+}
+
+/* 체크박스 커스텀 */
+.check-box {position: relative;}
+.check-box input[type="checkbox"] {position: absolute; width: 0; height: 0; opacity: 0; z-index: -1;}
+.check-box label {cursor: pointer;} 
+.check-box .chkbox {display: inline-block; vertical-align: middle; transform: translateY(-2px); width: 20px; height: 20px; position: relative; border-radius: 3px; box-sizing: border-box; margin-right:5px;}
+.check-box .chk-svg {overflow: hidden; position: absolute; left: -2px; top: -2px;}
+.check-box .chk-svg path{fill: none; stroke-dashoffset: 72px; stroke-dasharray: 72px; transition: all .5s;}
+.check-box .chk-svg polyline {fill: none; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; stroke-dashoffset: 18px; stroke-dasharray: 18px; transition: all .5s ease;}
+/* hover */
+.check-box label:hover .chk-svg path {stroke-dashoffset: 0px;}
+/* checked */
+.check-box input[type="checkbox"]:checked ~ .chkbox path {stroke-dashoffset: 0px;}
+.check-box input[type="checkbox"]:checked ~ .chkbox polyline {stroke-dashoffset: 0px;}
+/* 색상변경 */
+.check-box .chkbox {border: 2px solid #ddd;}
+.check-box .chk-svg path {stroke: #4e41db;}
+.check-box input[type="checkbox"]:checked ~ .chkbox path {fill: #4e41db;}
+.check-box .chk-svg polyline {stroke: #fff;}
+
+
+/* 라디오버튼 */
+/* 공통 */
+.radio-box {--radio: #4e41db; display: flex; align-items: center;}
+.radio-box input[type="radio"] {margin: 0; border-radius: 50%; position: relative; width: 18px; height: 18px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-right: 10px; cursor: pointer; top: 0;} 
+.radio-box input[type="radio"]::before {content: ''; width: 100%; height: 100%;  border-radius: 50%; position: relative; background: #fff; position: absolute; left: 0; top: 0; z-index: 1; opacity: 1; transition: opacity 0s linear .5s;} 
+.radio-box input[type="radio"]:checked::before {opacity: 1;  transition: none;}
+/* color 변경 */
+.radio-box input[type="radio"] {border: 1px solid #ccc;}
+.radio-box input[type="radio"]:checked {border: 1px solid var(--radio);}
+.radio-box input[type="radio"]:hover {border: 1px solid var(--radio);}
+/* 가로 */
+.radio-box label {display: flex; margin-right: 15px; align-items: center; cursor: pointer;}
+.radio-box input[type="radio"]::after {content: ''; width: 10px; height: 10px; display: flex; align-items: center; justify-self: center; background: var(--radio); border-radius: 50%; position: absolute; transition: transform .5s cubic-bezier(0.48,1.97,0.5,0.63); transform: translateX(200%); z-index: 1;}
+.radio-box input[type="radio"]:checked::after {transform: translateX(0%);}
+.radio-box input[type="radio"]:checked ~ input[type="radio"]::after { transform: translateX(-200%);}

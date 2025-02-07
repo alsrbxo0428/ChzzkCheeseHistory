@@ -134,6 +134,50 @@ function addFile() {
     document.getElementById("jsonFileInput").click();
 }
 
+function openManageCookie() {
+    document.body.style.cssText = "overflow: hidden; position: fixed; top: 0; width: 100%; height: 100%;";
+    document.querySelector(".popup_dimmed").style.display = "block";
+}
+
+function closeManageCookie() {
+    document.body.removeAttribute("style");
+    document.querySelector(".popup_dimmed").style.display = "none";
+}
+
+function saveCookie() {
+    document.cookie = "key=value; path=/; domain=alsrbxo0428.github.io;";
+
+    let hostname = window.location.hostname;
+    let expiresString = new Date();
+    expiresString.setDate(expiresString.getDate() + 30);
+
+    let channelCookie = `${encodeURIComponent(JSON.stringify())}; expires=${expiresString.toUTCString()}; path=/; domain=${hostname}`;
+
+}
+
+function loadCookie() {
+    let coockieChannels = document.cookie
+
+    let cheeseHistList = `  <tr>
+                                <td>${channel.channelName}</td>
+                                <td>0000년</td>
+                                <td>
+                                    <div class="check-box">
+                                        <label for="id_2024">
+                                            <input type="checkbox" id="id_2024" name="cookieCheckbox" value="id_2024" />
+                                            <div class="chkbox">
+                                                <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
+                                                    <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                    <polyline points="4 11 8 15 16 6"></polyline>
+                                                </svg>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>`;
+
+}
+
 function changeSortType() {
     document.getElementById("channelListContainer").innerHTML = makeList(channels);
 }
@@ -286,7 +330,6 @@ function rendarCalendar(focusDay) {
 
     if(focusDay != null && focusDay > 0) {
         for(let date of document.querySelectorAll('.date .this')) {
-            console.log(Number(date.innerText));
             if(Number(date.innerText) === focusDay) {
                 date.closest(".date").classList.add('focus_day');
                 break;
@@ -422,6 +465,7 @@ async function readFile(event) {
     document.getElementById("channelInfoYear").innerText = '';
     document.getElementById("totalPayAmount").innerText = `전체 후원 금액 : ${totalPayAmount.toLocaleString("ko-KR")}원`;
     document.getElementById("channelListContainer").innerHTML = makeList(channels);
+    document.getElementById("channelListContainer").style.display = "block";
 
     for(let channelData of channels) {
         for(let year of yearArr) {
@@ -441,6 +485,8 @@ async function readFile(event) {
             }
         }
     }
+
+    
 
     console.log(channels);
 }
@@ -487,14 +533,16 @@ function makeList(channels) {
     let html = `<div id="channelList">
                     ${sortedChannels.map(channel => `
                         <button onclick="getChannelHistory('${channel.channelId}');">
-                            ${
-                                channel.cheese04 ? '<img id="cheeseImg" src="./images/cheese04.png">' :
-                                channel.cheese03 ? '<img id="cheeseImg" src="./images/cheese03.png">' :
-                                channel.cheese02 ? '<img id="cheeseImg" src="./images/cheese02.png">' :
-                                channel.cheese01 ? '<img id="cheeseImg" src="./images/cheese01.png">' : ''
-                            }
                             <span>
-                                <img src="${channel.channelImageUrl}" />
+                                <img id="cheeseImg" 
+                                    ${
+                                        channel.cheese04 ? 'src="./images/cheese04.png"' :
+                                        channel.cheese03 ? 'src="./images/cheese03.png"' :
+                                        channel.cheese02 ? 'src="./images/cheese02.png"' :
+                                        channel.cheese01 ? 'src="./images/cheese01.png"' : ''
+                                    }
+                                >
+                                <img id="channelImg" src="${channel.channelImageUrl}" />
                             </span>
                             <p>${channel.channelName}</p>
                             <p>${Number(channel.channelTotal).toLocaleString("ko-KR")}원</p>
@@ -632,4 +680,53 @@ function makeDateStringToParameter(date) {
     let splitedDate = date.split("-");
 
     return `${Number(splitedDate[0])}, ${Number(splitedDate[1])}, ${Number(splitedDate[2])}`;
+}
+
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+
+function setCookie(name, value, options = {}) {
+    options = {
+        path: '/',
+        ...options
+    };
+  
+    if (options.expires instanceof Date) {
+        options.expires = options.expires.toUTCString();
+    }
+  
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+  
+    for (let optionKey in options) {
+        updatedCookie += "; " + optionKey;
+        let optionValue = options[optionKey];
+        if (optionValue !== true) {
+            updatedCookie += "=" + optionValue;
+        }
+    }
+  
+    document.cookie = updatedCookie;
+}
+
+function deleteCookie(name) {
+    setCookie(name, "", {
+        'max-age': -1
+    })
+}
+
+function deleteAllCookies() {
+    let cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+       let cookie = cookies[i];
+       let eqPos = cookie.indexOf("=");
+       let name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+
+       deleteCookie(name.trim());
+    }
 }
