@@ -54,6 +54,10 @@ section {
 strong {
     font-weight: 400;
 }
+
+table {
+    border-collapse: collapse;
+}
 /* tag */
 
 #comment {
@@ -474,6 +478,11 @@ strong {
     color: #4e41db;
 }
 
+.button_container.button_container_red {
+    background-color: #db4141;
+    color: #fff;
+}
+
 .form_button_ul {
     align-items: center;
     display: flex;
@@ -703,7 +712,7 @@ strong {
     display: flex;
     flex: 1 1;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
     background-color: #f1f3f5;
     border-radius: 0 0 15px 15px;
 }
@@ -781,6 +790,10 @@ strong {
 
 .table_container tbody tr:hover {
     background-color: rgba(245, 246, 248, .5);
+}
+
+.table_container tbody tr+tr {
+    border-top: 1px solid rgba(0, 0, 0, .05);
 }
 
 /* 체크박스 커스텀 */
