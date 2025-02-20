@@ -154,8 +154,7 @@ function chgView(type) {
     }
 }
 
-function chgCalendarDate(year, month, focusDay) {
-    document.getElementsByClassName("calendarDate")[0].innerText = `${year}년 ${month}월`;
+function chgCalendarDate(localYear, localMonth, focusDay) {
     document.getElementsByClassName("selectbox_inner")[1].innerHTML = ` ${year}년
         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
             <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
@@ -165,6 +164,8 @@ function chgCalendarDate(year, month, focusDay) {
             <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
         </svg>`;
 
+    year = localYear;
+    month = localMonth;
     rendarCalendar(focusDay);
 }
 
@@ -182,130 +183,18 @@ function goNext() {
     chgCalendarDate(year, month, null);
 }
 
-function goDate(localYear, localMonth, focusDay) {
-    year = localYear;
-    month = localMonth;
+function goDate(date) {
+    let splitedDate = date.split('-');
 
-    chgCalendarDate(year, month, focusDay);
-}
-
-function rendarCalendar(focusDay) {
-    let yearData = null;
-    let monthData = null;
-    let dayData = null;
-
-    if(channel) {
-        yearData = channel.yearData.find(data => data.year === year);
-        monthData = yearData ? yearData.monthData.find(data => data.month === month) : null;
-
-        document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthData ? (`<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)</h3>`) : `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
-        document.getElementsByClassName("cheese_history")[0].innerHTML = `
-        <ul>
-            <li><button onclick="goDate(${makeDateStringToParameter(channel.onedayMaxCheeseDate)})"><h4>일일최고후원금액 : ${Number(channel.onedayMaxCheese).toLocaleString("ko-KR")}원</h4></button></li>
-            ${channel.cheese01 ? `<li><button onclick="goDate(${makeDateStringToParameter(channel.cheeseDate01)})"><img src="./images/cheese01.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese02 ? `<li><button onclick="goDate(${makeDateStringToParameter(channel.cheeseDate02)})"><img src="./images/cheese02.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese03 ? `<li><button onclick="goDate(${makeDateStringToParameter(channel.cheeseDate03)})"><img src="./images/cheese03.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese04 ? `<li><button onclick="goDate(${makeDateStringToParameter(channel.cheeseDate04)})"><img src="./images/cheese04.png" class="cheese_history_button"></button></li>` : ''}
-        </ul>`;
-    }
-    
-    document.getElementsByClassName("calendarDate")[0].innerText = `${year}년 ${month}월`;
-
-    const prevLast = new Date(year, month - 1, 0);
-    const thisLast = new Date(year, month, 0);
-
-    const PLDate = prevLast.getDate();
-    const PLDay = prevLast.getDay();
-
-    const TLDate = thisLast.getDate();
-    const TLDay = thisLast.getDay();
-
-    const prevDates = [];
-    const thisDates = [...Array(TLDate + 1).keys()].slice(1);
-    const nextDates = [];
-
-    if(PLDay !== 6) {
-        for(let i = 0; i < PLDay + 1; i++) {
-            prevDates.unshift(PLDate - i);
-        }
-    }
-
-    for(let i = 1; i < 7 - TLDay; i++) {
-        nextDates.push(i);
-    }
-
-    const dates = prevDates.concat(thisDates, nextDates);
-
-    const firstDateIndex = dates.indexOf(1);
-    const lastDateIndex = dates.lastIndexOf(TLDate);
-
-    dates.forEach((date, i) => {
-        const condition = i >= firstDateIndex && i < lastDateIndex + 1 ? 'this' : 'other';
-        
-        if(i % 7 === 0) dates[i] = `<tr><td class="date">`;
-        else dates[i] = `<td class="date">`;
-
-        dates[i] += `
-        <span class="${condition}">
-            <h4>${date} 
-                    ${i >= firstDateIndex && i < lastDateIndex + 1 && channel ? (
-                        channel.cheese04 && channel.cheeseDate04 === makeDate(year, month, date) ? '<img src="./images/cheese04.png" class="cheeseDate">' :
-                        channel.cheese03 && channel.cheeseDate03 === makeDate(year, month, date) ? '<img src="./images/cheese03.png" class="cheeseDate">' :
-                        channel.cheese02 && channel.cheeseDate02 === makeDate(year, month, date) ? '<img src="./images/cheese02.png" class="cheeseDate">' :
-                        channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : 
-                        channel.firstCheeseDate === makeDate(year, month, date) ? '<img src="./images/fan_03.png" class="cheeseDate">' : ''
-                    ) : ''}
-                </h4>
-        </span>`;
-
-        dates[i] += `<div class="date_inner"><ul>`;
-        
-        if(monthData) {
-            dayData = monthData.dayData.find(data => data.day === date);
-            if(i >= firstDateIndex && i < lastDateIndex + 1 && dayData) {
-                dates[i] += `
-                    <li>${Number(dayData.dayTotal).toLocaleString("ko-KR")}원</li>
-                    <li>(${dayData.dayCount}회)</li>
-                `;
-            }
-
-            dayData = null;
-        }
-
-        dates[i] += `</ul></div></td>`;
-        
-        if(i % 7 === 6) dates[i] += `</tr>`;
-    });
-
-    document.querySelector(".dates").innerHTML = dates.join('');
-    
-    const today = new Date();
-    if(month === today.getMonth() + 1 && year === today.getFullYear()) {
-        for(let date of document.querySelectorAll('.date .this')) {
-            if(Number(date.innerText) === today.getDate()) {
-                date.closest(".date").classList.add('today');
-                break;
-            }
-        }
-    }
-
-    if(focusDay != null && focusDay > 0) {
-        for(let date of document.querySelectorAll('.date .this')) {
-            if(Number(date.innerText) === focusDay) {
-                date.closest(".date").classList.add('focus_day');
-                break;
-            }
-        }
-    }
+    chgCalendarDate(Number(splitedDate[0]), Number(splitedDate[1]), Number(splitedDate[2]));
 }
 
 async function readFile(event) {
     const files = event.target.files;
-    document.getElementById("fileList").innerText = `등록된 파일: ${files.length}건`;
     const cheeseDataArr = await processFiles(files);
-    let totalPayAmount = 0;
     
     channels = [];
+    document.getElementById("fileList").innerText = `등록된 파일: ${files.length}건`;
     document.getElementById("channelHistoryWrap").style.display = "none";
 
     if(cheeseDataArr) {
@@ -316,14 +205,11 @@ async function readFile(event) {
         });
 
         for(let cheeseData of cheeseDataArr) {
-            let splitedPurchaseDate = cheeseData.purchaseDate.split(' ')[0];
-            let splitedPurchaseDate2 = cheeseData.purchaseDate.split(' ')[0].split('-');
-            let purchaseYear = Number(splitedPurchaseDate2[0]);
-            let purchaseMonth = Number(splitedPurchaseDate2[1]);
-            let purchaseDay = Number(splitedPurchaseDate2[2]);
+            let splitedPurchaseDate = cheeseData.purchaseDate.split(' ')[0].split('-');
+            let purchaseYear = Number(splitedPurchaseDate[0]);
+            let purchaseMonth = Number(splitedPurchaseDate[1]);
+            let purchaseDay = Number(splitedPurchaseDate[2]);
             let payAmount = Number(cheeseData.payAmount);
-            
-            totalPayAmount += payAmount;
 
             let channelData = channels.find(channel => channel.channelId === cheeseData.channelId);
             if(!channelData) {
@@ -347,32 +233,6 @@ async function readFile(event) {
                     yearData: []
                 }
                 channels.push(channelData);
-            }
-
-            channelData.channelTotal += payAmount;
-            channelData.channelCount++;
-
-            if(!channelData.firstCheeseDate) channelData.firstCheeseDate = splitedPurchaseDate;
-            else if(!channelData.firstCheeseDate.localeCompare(splitedPurchaseDate)) channelData.firstCheeseDate = splitedPurchaseDate;
-
-            if(!channelData.cheese01 && channelData.channelTotal > 100_000) {
-                channelData.cheese01 = true;
-                channelData.cheeseDate01 = splitedPurchaseDate;
-            }
-
-            if(!channelData.cheese02 && channelData.cheese01 && channelData.channelTotal > 1_000_000) {
-                channelData.cheese02 = true;
-                channelData.cheeseDate02 = splitedPurchaseDate;
-            }
-
-            if(!channelData.cheese03 && channelData.cheese02 && channelData.channelTotal > 10_000_000) {
-                channelData.cheese03 = true;
-                channelData.cheeseDate03 = splitedPurchaseDate;
-            }
-
-            if(!channelData.cheese04 && channelData.cheese03 && channelData.channelTotal > 100_000_000) {
-                channelData.cheese04 = true;
-                channelData.cheeseDate04 = splitedPurchaseDate;
             }
 
             let yearData = channelData.yearData.find(data => data.year === purchaseYear);
@@ -418,38 +278,46 @@ async function readFile(event) {
         }
     }
 
-    for(let channelData of channels) {
-        for(let year of yearArr) {
-            let yearData = channelData.yearData.find(data => data.year === year);
-            if(yearData) {
-                for(let month of monthArr) {
-                    let monthData = yearData.monthData.find(data => data.month === month);
-                    if(monthData && monthData.dayData) {
-                        for(let data of monthData.dayData) {
-                            if(channelData.onedayMaxCheese < data.dayTotal) {
-                                channelData.onedayMaxCheese = data.dayTotal;
-                                channelData.onedayMaxCheeseDate = makeDate(year, month, data.day);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    initializationHtml(totalPayAmount);
+    initializationHtml();
     makeFileDataList();
 }
 
-function initializationHtml(totalPayAmount) {
+async function processFiles(files) {
+    const fileReadPromises = Array.from(files).map(file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if(data.code == 200) resolve(data.content.data);
+                else reject(`${data.message}`);
+            } catch (error) {
+                reject(`파일 변환 오류: ${error.message}`);
+            }
+        };
+
+        reader.onerror = () => reject("파일 읽기 실패");
+        reader.readAsText(file);
+    }));
+
+    try {
+        return (await Promise.all(fileReadPromises)).flat();
+    } catch (error) {
+        console.error("오류 발생:", error);
+        return [];
+    }
+}
+
+function initializationHtml() {
     if(window.monthlyChart instanceof Chart) {
         window.monthlyChart.destroy();
     }
 
-    if(totalPayAmount === 0) {
-        for(let channel of channels) {
-            totalPayAmount += channel.channelTotal;
-        }
+    rebuildChannels();
+
+    let totalPayAmount = 0;
+    for(let channel of channels) {
+        totalPayAmount += channel.channelTotal;
     }
 
     document.getElementById("channelInfo").innerText = '';
@@ -461,12 +329,14 @@ function initializationHtml(totalPayAmount) {
 
 function makeFileDataList() {
     let cheeseHistListHtml = '';
+    let cnt = 1;
 
     if(channels.length > 0) {
         for(let channelData of channels) {
             for(let i = 0; i < channelData.yearData.length; i++) {
                 cheeseHistListHtml += `
                 <tr>
+                    <td>${cnt++}</td>
                     <td>${channelData.channelName}</td>
                     <td>${channelData.yearData[i].year}년</td>
                     <td>
@@ -497,61 +367,33 @@ function makeFileDataList() {
     document.getElementById("cheeseHistList").innerHTML = cheeseHistListHtml;
 }
 
-async function processFiles(files) {
-    const fileReadPromises = Array.from(files).map(file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.code == 200) resolve(data.content.data);
-                else reject(`${data.message}`);
-            } catch (error) {
-                reject(`파일 변환 오류: ${error.message}`);
-            }
-        };
-
-        reader.onerror = () => reject("파일 읽기 실패");
-        reader.readAsText(file);
-    }));
-
-    try {
-        return (await Promise.all(fileReadPromises)).flat();
-    } catch (error) {
-        console.error("오류 발생:", error);
-        return [];
-    }
-}
-
 function makeList(channels) {
     let sortType = document.querySelector("input[name='sortType']:checked")?.value;
-    
-    channels.sort((a, b) => a.channelName.localeCompare(b.channelName));
-    
     let sortedChannels = [...channels];
     if('total' === sortType) {
         sortedChannels.sort((a, b) => b.channelTotal - a.channelTotal);
     }
 
-    let html = `<div id="channelList">
-                    ${sortedChannels.map(channel => `
-                        <button onclick="getChannelHistory('${channel.channelId}');">
-                            <span>
-                                <img id="cheeseImg" 
-                                    ${
-                                        channel.cheese04 ? 'src="./images/cheese04.png"' :
-                                        channel.cheese03 ? 'src="./images/cheese03.png"' :
-                                        channel.cheese02 ? 'src="./images/cheese02.png"' :
-                                        channel.cheese01 ? 'src="./images/cheese01.png"' : ''
-                                    }
-                                >
-                                <img id="channelImg" src="${channel.channelImageUrl}" />
-                            </span>
-                            <p>${channel.channelName}</p>
-                            <p>${Number(channel.channelTotal).toLocaleString("ko-KR")}원</p>
-                        </button>
-                    `).join('')}
-                </div>`;
+    let html = `
+    <div id="channelList">
+        ${sortedChannels.map(channel => `
+            <button onclick="getChannelHistory('${channel.channelId}');">
+                <span>
+                    <img id="cheeseImg" 
+                        ${
+                            channel.cheese04 ? 'src="./images/cheese04.png"' :
+                            channel.cheese03 ? 'src="./images/cheese03.png"' :
+                            channel.cheese02 ? 'src="./images/cheese02.png"' :
+                            channel.cheese01 ? 'src="./images/cheese01.png"' : ''
+                        }
+                    >
+                    <img id="channelImg" src="${channel.channelImageUrl}" />
+                </span>
+                <p>${channel.channelName}</p>
+                <p>${Number(channel.channelTotal).toLocaleString("ko-KR")}원</p>
+            </button>
+        `).join('')}
+    </div>`;
 
     return html;
 }
@@ -675,19 +517,124 @@ function makeChartDatasets() {
     return datasets;
 }
 
-function makeDate(year, month, date) {
-    return `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+function rendarCalendar(focusDay) {
+    let yearData = null;
+    let monthData = null;
+    let dayData = null;
+
+    if(channel) {
+        yearData = channel.yearData.find(data => data.year === year);
+        monthData = yearData ? yearData.monthData.find(data => data.month === month) : null;
+
+        document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthData ? (`<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)</h3>`) : `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
+        document.getElementsByClassName("cheese_history")[0].innerHTML = `
+        <ul>
+            ${channel.onedayMaxCheese > 0 ? `<li><button onclick="goDate('${channel.onedayMaxCheeseDate}')"><h4>일일최고후원금액 : ${Number(channel.onedayMaxCheese).toLocaleString("ko-KR")}원</h4></button></li>` : ''}
+            ${channel.cheese01 ? `<li><button onclick="goDate('${channel.cheeseDate01}')"><img src="./images/cheese01.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.cheese02 ? `<li><button onclick="goDate('${channel.cheeseDate02}')"><img src="./images/cheese02.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.cheese03 ? `<li><button onclick="goDate('${channel.cheeseDate03}')"><img src="./images/cheese03.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.cheese04 ? `<li><button onclick="goDate('${channel.cheeseDate04}')"><img src="./images/cheese04.png" class="cheese_history_button"></button></li>` : ''}
+        </ul>`;
+    }
+    
+    document.getElementsByClassName("calendarDate")[0].innerText = `${year}년 ${month}월`;
+
+    const prevLast = new Date(year, month - 1, 0);
+    const thisLast = new Date(year, month, 0);
+
+    const PLDate = prevLast.getDate();
+    const PLDay = prevLast.getDay();
+
+    const TLDate = thisLast.getDate();
+    const TLDay = thisLast.getDay();
+
+    const prevDates = [];
+    const thisDates = [...Array(TLDate + 1).keys()].slice(1);
+    const nextDates = [];
+
+    if(PLDay !== 6) {
+        for(let i = 0; i < PLDay + 1; i++) {
+            prevDates.unshift(PLDate - i);
+        }
+    }
+
+    for(let i = 1; i < 7 - TLDay; i++) {
+        nextDates.push(i);
+    }
+
+    const dates = prevDates.concat(thisDates, nextDates);
+
+    const firstDateIndex = dates.indexOf(1);
+    const lastDateIndex = dates.lastIndexOf(TLDate);
+
+    dates.forEach((date, i) => {
+        const condition = i >= firstDateIndex && i < lastDateIndex + 1 ? 'this' : 'other';
+        
+        if(i % 7 === 0) dates[i] = `<tr><td class="date">`;
+        else dates[i] = `<td class="date">`;
+
+        dates[i] += `
+        <span class="${condition}">
+            <h4>${date} 
+                    ${i >= firstDateIndex && i < lastDateIndex + 1 && channel ? (
+                        channel.cheese04 && channel.cheeseDate04 === makeDate(year, month, date) ? '<img src="./images/cheese04.png" class="cheeseDate">' :
+                        channel.cheese03 && channel.cheeseDate03 === makeDate(year, month, date) ? '<img src="./images/cheese03.png" class="cheeseDate">' :
+                        channel.cheese02 && channel.cheeseDate02 === makeDate(year, month, date) ? '<img src="./images/cheese02.png" class="cheeseDate">' :
+                        channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : 
+                        channel.firstCheeseDate === makeDate(year, month, date) ? '<img src="./images/fan_03.png" class="cheeseDate">' : ''
+                    ) : ''}
+                </h4>
+        </span>`;
+
+        dates[i] += `<div class="date_inner"><ul>`;
+        
+        if(monthData) {
+            dayData = monthData.dayData.find(data => data.day === date);
+            if(i >= firstDateIndex && i < lastDateIndex + 1 && dayData) {
+                dates[i] += `
+                    <li>${Number(dayData.dayTotal).toLocaleString("ko-KR")}원</li>
+                    <li>(${dayData.dayCount}회)</li>
+                `;
+            }
+
+            dayData = null;
+        }
+
+        dates[i] += `</ul></div></td>`;
+        
+        if(i % 7 === 6) dates[i] += `</tr>`;
+    });
+
+    document.querySelector(".dates").innerHTML = dates.join('');
+    
+    const today = new Date();
+    if(month === today.getMonth() + 1 && year === today.getFullYear()) {
+        for(let date of document.querySelectorAll('.date .this')) {
+            if(Number(date.innerText) === today.getDate()) {
+                date.closest(".date").classList.add('today');
+                break;
+            }
+        }
+    }
+
+    if(focusDay != null && focusDay > 0) {
+        for(let date of document.querySelectorAll('.date .this')) {
+            if(Number(date.innerText) === focusDay) {
+                date.closest(".date").classList.add('focus_day');
+                break;
+            }
+        }
+    }
 }
 
-function makeDateStringToParameter(date) {
-    let splitedDate = date.split("-");
-
-    return `${Number(splitedDate[0])}, ${Number(splitedDate[1])}, ${Number(splitedDate[2])}`;
+function makeDate(year, month, date) {
+    return `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
 }
 
 function openManageLocalStorage() {
     document.body.style.cssText = "overflow: hidden; position: fixed; top: 0; width: 100%; height: 100%;";
     document.querySelector(".popup_dimmed").style.display = "flex";
+    loadLocalStorageDataList();
 }
 
 function closeManageLocalStorage() {
@@ -696,53 +643,61 @@ function closeManageLocalStorage() {
 }
 
 function loadLocalStorageDataList() {
-    let channels_localStorage = window.localStorage;
+    let tmpChannels = [];
+    let channelData = null;
+    let channelId = null;
+    let channelName = null;
+    let channelYear = null;
+    let channelYearDataArr = null;
     let cheeseHistListHtml = '';
-
-
-
-
-
-
-
-    let cookies = document.cookie.split("; ");
-
-    if (cookies[0] != "") {
-        let cookie = null;
-        let cookieName = null;
-        let splitedCookieName = null;
-        let channelId = null;
-        let channelName = null;
-        let channelYear = null;
-        
-        for(let cookieData of cookies) {
-            cookie = decodeURIComponent(cookieData).split("=");
-            cookieName = cookie[0];
-            
-            splitedCookieName = cookieName.split("_");
-            channelId = splitedCookieName[0];
-            channelName = splitedCookieName[1];
-            channelYear = splitedCookieName[2];
-
-            cheeseHistListHtml += `
-            <tr>
-                <td>${channelName}</td>
-                <td>${channelYear}년</td>
-                <td>
-                    <div class="check-box">
-                        <label for="localStorage_${channelId}_${channelYear}">
-                            <input type="checkbox" id="localStorage_${channelId}_${channelYear}" name="localStorage_cheeseHistList" value="${channelId}_${channelYear}" checked />
-                            <div class="chkbox">
-                                <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
-                                    <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
-                                    <polyline points="4 11 8 15 16 6"></polyline>
-                                </svg>
-                            </div>
-                        </label>
-                    </div>
-                </td>
-            </tr>`;
+    let cnt = 1;
+    
+    let localStorageKeys = Object.keys(localStorage);
+    for(let key of localStorageKeys) {
+        channelData = getLocalStorageChannelData(key);
+        if(!channelData.yearData || channelData.yearData.length === 0) localStorage.removeItem(key);
+    }
+    localStorageKeys = Object.keys(localStorage);
+    
+    if(localStorageKeys.length > 0) {
+        for(let key of localStorageKeys) {
+            tmpChannels.push(getLocalStorageChannelData(key));
         }
+        tmpChannels.sort((a, b) => a.channelName.localeCompare(b.channelName));
+        
+        for(let channel of tmpChannels) {
+            channel.yearData.sort((a, b) => a.year - b.year);
+
+            channelId = channel.channelId;
+            channelName = channel.channelName;
+            channelYearDataArr = channel.yearData;
+            
+            for(let yearData of channelYearDataArr) {
+                if(!yearData) continue;
+                channelYear = yearData.year;
+                
+                cheeseHistListHtml += `
+                <tr>
+                    <td>${cnt++}</td>
+                    <td>${channelName}</td>
+                    <td>${channelYear}년</td>
+                    <td>
+                        <div class="check-box">
+                            <label for="localStorage_${channelId}_${channelYear}">
+                                <input type="checkbox" id="localStorage_${channelId}_${channelYear}" name="localStorage_cheeseHistList" value="${channelId}_${channelYear}" checked />
+                                <div class="chkbox">
+                                    <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
+                                        <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                        <polyline points="4 11 8 15 16 6"></polyline>
+                                    </svg>
+                                </div>
+                            </label>
+                        </div>
+                    </td>
+                </tr>`;
+            }
+        }
+        
     } else {
         cheeseHistListHtml += `
         <tr>
@@ -753,6 +708,7 @@ function loadLocalStorageDataList() {
     }
     
     document.getElementById("cheeseHistLocalStorageList").innerHTML = cheeseHistListHtml;
+    document.getElementById("localStorage_allCheck").checked = true;
 }
 
 function allCheck(id) {
@@ -770,7 +726,7 @@ function allCheck(id) {
 }
 
 function getLocalStorageChannelData(channelId) {
-    return JSON.parse(window.localStorage.getItem(channelId));
+    return JSON.parse(decodeURIComponent(localStorage.getItem(channelId)));
 }
 
 function saveLocalStorage() {
@@ -779,6 +735,7 @@ function saveLocalStorage() {
     let channelId = null;
     let year_param = null;
     let channelData = null;
+    let count = 0;
     
     for(let input of inputList) {
         inputValue = input.value.split("_");
@@ -787,27 +744,29 @@ function saveLocalStorage() {
 
         channelData = channels.find(channel => channel.channelId === channelId);
         if(channelData) {
-            setLocalStorage(channelId, Number(year_param), channelData);
+            setLocalStorage(channelId, year_param, channelData);
+            count++;
         }
     }
 
     loadLocalStorageDataList();
+    alert(`${count}건의 로컬 스토리지에 데이터가 저장되었습니다.`);
 }
 
 function setLocalStorage(channelId, year_param, channelData) {
-    let expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() + 31);
-
     let local_channelData = getLocalStorageChannelData(channelId);
     let local_yearDataIndex = null;
     let flag = false;
+    year_param = Number(year_param);
     
     if(local_channelData) {
         local_yearDataIndex = local_channelData.yearData.findIndex(data => data.year === year_param);
         if(local_yearDataIndex !== -1) {
-            local_channelData.channelImageUrl = channelData.channelImageUrl;
-            local_channelData.yearData[local_yearDataIndex] = channelData.yearData.find(data => data.year === year_param);
-            flag = true;
+            if(channelData) {
+                local_channelData.channelImageUrl = channelData.channelImageUrl;
+                local_channelData.yearData[local_yearDataIndex] = channelData.yearData.find(data => data.year === year_param);
+                flag = true;
+            }
         }
     } else {
         local_channelData = {
@@ -832,74 +791,233 @@ function setLocalStorage(channelId, year_param, channelData) {
     }
     
     if(!flag) {
-        local_channelData.yearData.push(local_yearData);
+        local_channelData.yearData.push(channelData.yearData.find(data => data.year === year_param));
     }
     
-    let data = {
-        data: local_channelData,
-        expire: expireDate.getTime()
-    }
-
-    window.localStorage.setItem(channelId, data);
-}
-
-function deleteLocalStorage(channelId_year) {
-    let splitedChannelId_year = channelId_year.split("_");
-    setLocalStorage(splitedChannelId_year[0], splitedChannelId_year[1], null);
+    localStorage.setItem(channelId, encodeURIComponent(JSON.stringify(local_channelData)));
 }
 
 function deleteCheckedLocalStorage() {
     let checkedList = document.querySelectorAll("input[name='localStorage_cheeseHistList']:checked");
-
+    
     if(checkedList.length > 0) {
         let isConfirm = confirm(`${checkedList.length}건의 데이터가 삭제됩니다.\n정말 삭제하시겠습니까?`);
+        
         if(isConfirm) {
+            let deleteDatas = [];
+            let deleteData = null;
+            let splitedIdnYear = null;
+            let channelId = null;
+            let channelYear = null;
+            let channelData = null;
+            let yearDataIndex = -1;
+
             for(let checked of checkedList) {
-                deleteLocalStorage(checked.value);
+                splitedIdnYear = checked.value.split("_");
+                channelId = splitedIdnYear[0];
+                channelYear = Number(splitedIdnYear[1]);
+
+                deleteData = deleteDatas.find(channel => channel.channelId === channelId);
+                if(!deleteData) {
+                    deleteData = {
+                        channelId: channelId,
+                        year: []
+                    }
+                    deleteDatas.push(deleteData);
+                }
+                deleteData.year.push(channelYear);
+
+                splitedIdnYear = null;
+                channelId = null;
+                channelYear = null;
+                deleteData = null;
+            }
+            
+            if(deleteDatas.length > 0) {
+                for(let deleteData of deleteDatas) {
+                    channelData = getLocalStorageChannelData(deleteData.channelId);
+
+                    for(let year of deleteData.year) {
+                        yearDataIndex = channelData.yearData.findIndex(yearData => yearData.year === year);
+                        if(yearDataIndex !== -1) {
+                            channelData.yearData.splice(yearDataIndex, 1);
+                        }
+                        yearDataIndex = -1;
+                    }
+
+                    localStorage.setItem(channelData.channelId, encodeURIComponent(JSON.stringify(channelData)));
+                    channelData = null;
+                }
             }
         }
     } else {
         alert('선택된 데이터가 없습니다.');
     }
-    
+
     loadLocalStorageDataList();
 }
 
-function clearLocalStorage() {
-    window.localStorage.clear();
-}
-
 function applyLocalStorage() {
-    let inputList = document.querySelectorAll("input[name='localStorage_cheeseHistList']:checked");
-    if(inputList.length > 0) {
-        let inputId = null;
-        let channelId = null;
-        let channelYear = null;
+    let checkedList = document.querySelectorAll("input[name='localStorage_cheeseHistList']:checked");
+    
+    if(checkedList.length > 0) {
+        let checkedDatas = [];
+        let checkedData = null;
+        let splitedIdnYear = null;
+        let checkedChannelId = null;
+        let checkedChannelYear = null;
+
+        let localChannelData = null;
+        let localYearData = null;
+
         let channelData = null;
-        let yearData = null;
-    
-        for(let input of inputList) {
-            inputId = input.id.split("_");
-            channelId = inputId[1];
-            channelYear = inputId[2];
-    
-            channelData = channels.find(channel => channel.channelId === channelId);
+        let yearDataIndex = -1;
+
+        for(let checked of checkedList) {
+            splitedIdnYear = checked.value.split("_");
+            checkedChannelId = splitedIdnYear[0];
+            checkedChannelYear = Number(splitedIdnYear[1]);
+
+            checkedData = checkedDatas.find(channel => channel.channelId === checkedChannelId);
+
+            if(!checkedData) {
+                checkedData = {
+                    channelId: checkedChannelId,
+                    year: []
+                }
+                checkedDatas.push(checkedData);
+            }
+
+            checkedData.year.push(checkedChannelYear);
+
+            splitedIdnYear = null;
+            checkedChannelId = null;
+            checkedChannelYear = null;
+            checkedData = null;
         }
 
-        for(let checkedCookie of checkedCookieList) {
-            yearData = getCookie(encodeURIComponent(checkedCookie.value));
-            if(yearData[0] != "") {
-                channels.find(channel => channel.channelId === channelId);
+        if(checkedDatas.length > 0) {
+            for(let checkedData of checkedDatas) {
+                localChannelData = getLocalStorageChannelData(checkedData.channelId);
+
+                for(let year of checkedData.year) {
+                    localYearData = localChannelData.yearData.find(yearData => yearData.year === year);
+                    channelData = channels.find(channel => channel.channelId === checkedData.channelId);
+                    
+                    if(channelData) {
+                        yearDataIndex = channelData.yearData.findIndex(yearData => yearData.year === year);
+
+                        if(yearDataIndex !== -1) {
+                            channelData.yearData.splice(yearDataIndex, 1);
+                        }
+
+                        channelData.yearData.push(localYearData);
+                        
+                        yearDataIndex = -1;
+                    } else {
+                        channelData = {
+                            channelId: localChannelData.channelId,
+                            channelName: localChannelData.channelName,
+                            channelImageUrl: localChannelData.channelImageUrl,
+                            channelTotal: 0,
+                            channelCount: 0,
+                            cheese01: false,
+                            cheeseDate01: null,
+                            cheese02: false,
+                            cheeseDate02: null,
+                            cheese03: false,
+                            cheeseDate03: null,
+                            cheese04: false,
+                            cheeseDate04: null,
+                            firstCheeseDate: null,
+                            onedayMaxCheese: 0,
+                            onedayMaxCheeseDate: null,
+                            yearData: []
+                        }
+                        channelData.yearData.push(localYearData);
+                        channels.push(channelData);
+                    }
+
+                    localYearData = null;
+                    channelData = null;
+                }
+                
+                localChannelData = null;
             }
         }
-
-        // initializationHtml(0);
-        // closeManageCookie();
+        
+        initializationHtml();
+        closeManageLocalStorage();
     } else {
         alert('선택된 데이터가 없습니다.');
     }
 }
 
+function rebuildChannels() {
+    if(channels[0] !== '') {
+        channels.sort((a, b) => a.channelName.localeCompare(b.channelName));
 
-console.log(window.localStorage);
-loadLocalStorageDataList();
+        for(let channel of channels) {
+            channel.channelTotal = 0;
+            channel.channelCount = 0;
+            channel.cheese01 = false;
+            channel.cheeseDate01 = null;
+            channel.cheese02 = false;
+            channel.cheeseDate02 = null;
+            channel.cheese03 = false;
+            channel.cheeseDate03 = null;
+            channel.cheese04 = false;
+            channel.cheeseDate04 = null;
+            channel.firstCheeseDate = null;
+            channel.onedayMaxCheese = 0;
+            channel.onedayMaxCheeseDate = null;
+
+            channel.yearData.sort((a, b) => a.year - b.year);
+
+            for(let year of yearArr) {
+                let yearData = channel.yearData.find(data => data.year === year);
+
+                if(yearData) {
+                    for(let month of monthArr) {
+                        let monthData = yearData.monthData.find(data => data.month === month);
+
+                        if(monthData && monthData.dayData) {
+                            for(let dayData of monthData.dayData) {
+                                channel.channelTotal += dayData.dayTotal;
+                                channel.channelCount++;
+                            
+                                if(!channel.firstCheeseDate) channel.firstCheeseDate = makeDate(year, month, dayData.day);
+                                else if(!channel.firstCheeseDate.localeCompare(makeDate(year, month, dayData.day))) channel.firstCheeseDate = makeDate(year, month, dayData.day);
+                            
+                                if(!channel.cheese01 && channel.channelTotal > 100_000) {
+                                    channel.cheese01 = true;
+                                    channel.cheeseDate01 = makeDate(year, month, dayData.day);
+                                }
+                            
+                                if(!channel.cheese02 && channel.cheese01 && channel.channelTotal > 1_000_000) {
+                                    channel.cheese02 = true;
+                                    channel.cheeseDate02 = makeDate(year, month, dayData.day);
+                                }
+                            
+                                if(!channel.cheese03 && channel.cheese02 && channel.channelTotal > 10_000_000) {
+                                    channel.cheese03 = true;
+                                    channel.cheeseDate03 = makeDate(year, month, dayData.day);
+                                }
+                            
+                                if(!channel.cheese04 && channel.cheese03 && channel.channelTotal > 100_000_000) {
+                                    channel.cheese04 = true;
+                                    channel.cheeseDate04 = makeDate(year, month, dayData.day);
+                                }
+
+                                if(channel.onedayMaxCheese < dayData.dayTotal) {
+                                    channel.onedayMaxCheese = dayData.dayTotal;
+                                    channel.onedayMaxCheeseDate = makeDate(year, month, dayData.day);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
