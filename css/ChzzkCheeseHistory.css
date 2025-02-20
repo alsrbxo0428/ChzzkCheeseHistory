@@ -645,6 +645,7 @@ table {
 .cheeseDate {
     height: 25px;
     position: absolute;
+    margin-left: 5px;
 }
 
 .calendar_month_total {
