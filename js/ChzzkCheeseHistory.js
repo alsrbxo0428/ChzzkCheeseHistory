@@ -706,7 +706,7 @@ function saveLocalStorage() {
         }
     
         loadLocalStorageDataList();
-        alert(`${count}건의 로컬 스토리지에 데이터가 저장되었습니다.`);
+        alert(`${count}건의 데이터가 저장되었습니다.`);
     } else {
         alert('선택된 데이터가 없습니다.');
     }
