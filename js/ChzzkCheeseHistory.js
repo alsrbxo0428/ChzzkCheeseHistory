@@ -189,6 +189,14 @@ function goDate(date) {
     chgCalendarDate(Number(splitedDate[0]), Number(splitedDate[1]), Number(splitedDate[2]));
 }
 
+function goToday() {
+    let today = new Date();
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+
+    chgCalendarDate(year, month, null);
+}
+
 function createNewChannelData(channelData) {
     return {
         channelId: channelData.channelId,
@@ -533,11 +541,12 @@ function rendarCalendar(focusDay) {
         document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthData ? (`<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)</h3>`) : `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
         document.getElementsByClassName("cheese_history")[0].innerHTML = `
         <ul>
-            ${channel.onedayMaxCheese > 0 ? `<li><button onclick="goDate('${channel.onedayMaxCheeseDate}')"><h4>일일최고후원금액 : ${Number(channel.onedayMaxCheese).toLocaleString("ko-KR")}원</h4></button></li>` : ''}
-            ${channel.cheese01 ? `<li><button onclick="goDate('${channel.cheeseDate01}')"><img src="./images/cheese01.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese02 ? `<li><button onclick="goDate('${channel.cheeseDate02}')"><img src="./images/cheese02.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese03 ? `<li><button onclick="goDate('${channel.cheeseDate03}')"><img src="./images/cheese03.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese04 ? `<li><button onclick="goDate('${channel.cheeseDate04}')"><img src="./images/cheese04.png" class="cheese_history_button"></button></li>` : ''}
+            <li><button onclick="goToday();"><h4>TODAY</h4></button></li>
+            ${channel.onedayMaxCheese > 0 ? `<li><button onclick="goDate('${channel.onedayMaxCheeseDate}');"><h4>최고후원금액 : ${Number(channel.onedayMaxCheese).toLocaleString("ko-KR")}원</h4></button></li>` : ''}
+            ${channel.cheese01 ? `<li><button onclick="goDate('${channel.cheeseDate01}');"><img src="./images/cheese01.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.cheese02 ? `<li><button onclick="goDate('${channel.cheeseDate02}');"><img src="./images/cheese02.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.cheese03 ? `<li><button onclick="goDate('${channel.cheeseDate03}');"><img src="./images/cheese03.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.cheese04 ? `<li><button onclick="goDate('${channel.cheeseDate04}');"><img src="./images/cheese04.png" class="cheese_history_button"></button></li>` : ''}
         </ul>`;
     }
     
