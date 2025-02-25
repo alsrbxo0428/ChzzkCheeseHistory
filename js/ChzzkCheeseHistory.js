@@ -684,27 +684,32 @@ function getLocalStorageChannelData(channelId) {
 }
 
 function saveLocalStorage() {
-    let inputList = document.querySelectorAll("input[name='file_cheeseHistList']:checked");
-    let inputValue = null;
-    let channelId = null;
-    let yearParam = null;
-    let channelData = null;
-    let count = 0;
+    let checkedList = document.querySelectorAll("input[name='file_cheeseHistList']:checked");
     
-    for(let input of inputList) {
-        inputValue = input.value.split("_");
-        channelId = inputValue[0];
-        yearParam = inputValue[1];
-
-        channelData = channels.find(channel => channel.channelId === channelId);
-        if(channelData) {
-            setLocalStorage(channelId, yearParam, channelData);
-            count++;
+    if(checkedList.length > 0) {
+        let checkedValue = null;
+        let channelId = null;
+        let yearParam = null;
+        let channelData = null;
+        let count = 0;
+        
+        for(let checked of checkedList) {
+            checkedValue = checked.value.split("_");
+            channelId = checkedValue[0];
+            yearParam = checkedValue[1];
+    
+            channelData = channels.find(channel => channel.channelId === channelId);
+            if(channelData) {
+                setLocalStorage(channelId, yearParam, channelData);
+                count++;
+            }
         }
+    
+        loadLocalStorageDataList();
+        alert(`${count}건의 로컬 스토리지에 데이터가 저장되었습니다.`);
+    } else {
+        alert('선택된 데이터가 없습니다.');
     }
-
-    loadLocalStorageDataList();
-    alert(`${count}건의 로컬 스토리지에 데이터가 저장되었습니다.`);
 }
 
 function setLocalStorage(channelId, yearParam, channelData) {
