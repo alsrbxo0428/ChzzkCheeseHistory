@@ -1,124 +1,72 @@
 let channels = [];
 let channel = null;
-let selectboxFlag = true;
-let selectboxFlag2 = true;
-let selectboxFlag3 = true;
-const monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-const yearArr = [2023, 2024, 2025];
 let date = new Date();
 let year = date.getFullYear();
 let month = date.getMonth() + 1;
 let calendarDate = `${year}-${month}`;
 
-chgSearchYear(year);
-chgCalendarYear(year);
-chgCalendarMonth(month);
+const monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const yearArr = [2023, 2024, 2025];
+const selectboxState = {};
 
-document.getElementsByClassName("selectbox_component")[0].addEventListener("focus", handleFocusChange);
-document.getElementsByClassName("selectbox_component")[0].addEventListener("blur", handleFocusChange);
+document.addEventListener("DOMContentLoaded", function() {
+    chgSearchYear(year);
+    chgCalendarYear(year);
+    chgCalendarMonth(month);
+    
+    document.querySelectorAll(".selectbox_component").forEach((element) => {
+        const key = element.dataset.key;
+        selectboxState[key] = false;
+        element.addEventListener("focus", handleFocusChange);
+        element.addEventListener("blur", handleFocusChange);
+    });
+    
+    document.getElementById("size").addEventListener("focus", handleFocusChangeSize);
+    document.getElementById("size").addEventListener("blur", handleFocusChangeSize);
 
-document.getElementsByClassName("selectbox_component")[1].addEventListener("focus", handleFocusChange2);
-document.getElementsByClassName("selectbox_component")[1].addEventListener("blur", handleFocusChange2);
+    let year_selectbox_items = ``;
+    for(let i = 0; i < 2; i++) {
+        year_selectbox_items = ``;
+        for(let year of yearArr) {
+            year_selectbox_items += `<li class="selectbox_item">
+                <button type="button" class="selectbox_option" onclick="${i == 0 ? "chgSearchYear" : "chgCalendarYear"}(${year});">${year}년</button>
+            </li>`;
+        }
+        document.querySelector(i == 0 ? ".search_year_selectbox" : ".calendar_year_selectbox").innerHTML = year_selectbox_items;
+    }
 
-document.getElementsByClassName("selectbox_component")[2].addEventListener("focus", handleFocusChange3);
-document.getElementsByClassName("selectbox_component")[2].addEventListener("blur", handleFocusChange3);
-
-document.getElementById("size").addEventListener("focus", handleFocusChange4);
-document.getElementById("size").addEventListener("blur", handleFocusChange4);
-
-function openProfile() {
-    document.getElementById("profileUrl").click();
-}
-
-function chgUrl() {
-    document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=${document.getElementById("size").value}&searchYear=${document.getElementById("searchYear").value}`;
-}
-
-function chgSearchYear(localYear) {
-    document.getElementById("searchYear").value = localYear;
-    document.getElementsByClassName("selectbox_inner")[0].innerHTML = ` ${localYear}년
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-        </svg>`;
-
-    selectboxToggle();
-    chgUrl();
-}
-
-function chgCalendarYear(localYear) {
-    document.getElementsByClassName("selectbox_inner")[1].innerHTML = ` ${localYear}년
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-        </svg>`;
-
-    year = localYear;
-    selectboxToggle2();
-}
-
-function chgCalendarMonth(localMonth) {
-    document.getElementsByClassName("selectbox_inner")[2].innerHTML = ` ${localMonth}월
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-        </svg>`;
-
-    month = localMonth;
-    selectboxToggle3();
-}
+    let month_selectbox_items = ``;
+    for(let month of monthArr) {
+        month_selectbox_items += `<li class="selectbox_item">
+            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(${month});">${month}월</button>
+        </li>`;
+    }
+    document.querySelector(".calendar_month_selectbox").innerHTML = month_selectbox_items;
+});
 
 function handleFocusChange(event) {
-    if (event.type === "focus") {
-        document.getElementsByClassName("selectbox_component")[0].classList.add("selectbox_is_focused");
-    } else if (event.type === "blur") {
-        document.getElementsByClassName("selectbox_component")[0].classList.remove("selectbox_is_focused");
+    const element = event.target;
+    const key = element.dataset.key;
+
+    if(!key) return;
+
+    if(event.type === "focus") {
+        element.classList.add("selectbox_is_focused");
+        document.querySelector(`.${key}_selectbox`).dataset.visible = "true";
+    } else if(event.type === "blur") {
+        element.classList.remove("selectbox_is_focused");
         setTimeout(function() {
-            if(selectboxFlag) selectboxToggle();
+            document.querySelector(`.${key}_selectbox`).dataset.visible = "false";
         }, 100);
     }
 }
 
-function handleFocusChange2(event) {
-    if (event.type === "focus") {
-        document.getElementsByClassName("selectbox_component")[1].classList.add("selectbox_is_focused");
-    } else if (event.type === "blur") {
-        document.getElementsByClassName("selectbox_component")[1].classList.remove("selectbox_is_focused");
-        setTimeout(function() {
-            if(selectboxFlag2) selectboxToggle2();
-        }, 100);
-    }
-}
-
-function handleFocusChange3(event) {
-    if (event.type === "focus") {
-        document.getElementsByClassName("selectbox_component")[2].classList.add("selectbox_is_focused");
-    } else if (event.type === "blur") {
-        document.getElementsByClassName("selectbox_component")[2].classList.remove("selectbox_is_focused");
-        setTimeout(function() {
-            if(selectboxFlag3) selectboxToggle3();
-        }, 100);
-    }
-}
-
-function handleFocusChange4(event) {
+function handleFocusChangeSize(event) {
     if (event.type === "focus") {
         document.getElementById("size").closest(".search_wrapper").classList.add("search_is_focused");
     } else if (event.type === "blur") {
         document.getElementById("size").closest(".search_wrapper").classList.remove("search_is_focused");
     }
-}
-
-function selectboxToggle() {
-    selectboxFlag = !selectboxFlag;
-    document.getElementsByClassName("selectbox_layer")[0].style.display = selectboxFlag ? "block" : "none";
-}
-
-function selectboxToggle2() {
-    selectboxFlag2 = !selectboxFlag2;
-    document.getElementsByClassName("selectbox_layer")[1].style.display = selectboxFlag2 ? "block" : "none";
-}
-
-function selectboxToggle3() {
-    selectboxFlag3 = !selectboxFlag3;
-    document.getElementsByClassName("selectbox_layer")[2].style.display = selectboxFlag3 ? "block" : "none";
 }
 
 function openHistory() {
@@ -128,6 +76,27 @@ function openHistory() {
     }
 
     document.getElementById("apiLink").click();
+}
+
+function chgSearchYear(yearParam) {
+    document.getElementById("searchYear").value = yearParam;
+    document.getElementsByClassName("selectbox_inner")[0].innerHTML = `${yearParam}년` + returnSelectboxIconArrow();
+
+    chgUrl();
+}
+
+function chgUrl() {
+    document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=${document.getElementById("size").value}&searchYear=${document.getElementById("searchYear").value}`;
+}
+
+function chgCalendarYear(yearParam) {
+    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${yearParam}년` + returnSelectboxIconArrow();
+    year = yearParam;
+}
+
+function chgCalendarMonth(monthParam) {
+    document.getElementsByClassName("selectbox_inner")[2].innerHTML = `${monthParam}월` + returnSelectboxIconArrow();
+    month = monthParam;
 }
 
 function addFile() {
@@ -144,28 +113,22 @@ function chgView(type) {
         document.getElementById("calendarBtn").classList.remove("on");
         document.getElementById("channelHistory").style.display = "block";
         document.getElementById("channelHistoryCalendar").style.display = "none";
-        document.getElementsByClassName("selectbox")[0].style.display = "none";
+        document.querySelector(".selectbox").style.display = "none";
     } else if(type === 'Calendar') {
         document.getElementById("graphBtn").classList.remove("on");
         document.getElementById("calendarBtn").classList.add("on");
         document.getElementById("channelHistory").style.display = "none";
         document.getElementById("channelHistoryCalendar").style.display = "block";
-        document.getElementsByClassName("selectbox")[0].style.display = "block";
+        document.querySelector(".selectbox").style.display = "block";
     }
 }
 
-function chgCalendarDate(localYear, localMonth, focusDay) {
-    document.getElementsByClassName("selectbox_inner")[1].innerHTML = ` ${year}년
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-        </svg>`;
-    document.getElementsByClassName("selectbox_inner")[2].innerHTML = ` ${month}월
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-            <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-        </svg>`;
+function chgCalendarDate(yearParam, monthParam, focusDay) {
+    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${year}년` + returnSelectboxIconArrow();
+    document.getElementsByClassName("selectbox_inner")[2].innerHTML = `${month}월` + returnSelectboxIconArrow();
 
-    year = localYear;
-    month = localMonth;
+    year = yearParam;
+    month = monthParam;
     rendarCalendar(focusDay);
 }
 
@@ -195,28 +158,6 @@ function goToday() {
     month = today.getMonth() + 1;
 
     chgCalendarDate(year, month, null);
-}
-
-function createNewChannelData(channelData) {
-    return {
-        channelId: channelData.channelId,
-        channelName: channelData.channelName,
-        channelImageUrl: channelData.channelImageUrl,
-        channelTotal: 0,
-        channelCount: 0,
-        cheese01: false,
-        cheeseDate01: null,
-        cheese02: false,
-        cheeseDate02: null,
-        cheese03: false,
-        cheeseDate03: null,
-        cheese04: false,
-        cheeseDate04: null,
-        firstCheeseDate: null,
-        onedayMaxCheese: 0,
-        onedayMaxCheeseDate: null,
-        yearData: []
-    }
 }
 
 async function readFile(event) {
@@ -746,18 +687,18 @@ function saveLocalStorage() {
     let inputList = document.querySelectorAll("input[name='file_cheeseHistList']:checked");
     let inputValue = null;
     let channelId = null;
-    let year_param = null;
+    let yearParam = null;
     let channelData = null;
     let count = 0;
     
     for(let input of inputList) {
         inputValue = input.value.split("_");
         channelId = inputValue[0];
-        year_param = inputValue[1];
+        yearParam = inputValue[1];
 
         channelData = channels.find(channel => channel.channelId === channelId);
         if(channelData) {
-            setLocalStorage(channelId, year_param, channelData);
+            setLocalStorage(channelId, yearParam, channelData);
             count++;
         }
     }
@@ -766,18 +707,18 @@ function saveLocalStorage() {
     alert(`${count}건의 로컬 스토리지에 데이터가 저장되었습니다.`);
 }
 
-function setLocalStorage(channelId, year_param, channelData) {
+function setLocalStorage(channelId, yearParam, channelData) {
     let local_channelData = getLocalStorageChannelData(channelId);
     let local_yearDataIndex = null;
     let flag = false;
-    year_param = Number(year_param);
+    yearParam = Number(yearParam);
     
     if(local_channelData) {
-        local_yearDataIndex = local_channelData.yearData.findIndex(data => data.year === year_param);
+        local_yearDataIndex = local_channelData.yearData.findIndex(data => data.year === yearParam);
         if(local_yearDataIndex !== -1) {
             if(channelData) {
                 local_channelData.channelImageUrl = channelData.channelImageUrl;
-                local_channelData.yearData[local_yearDataIndex] = channelData.yearData.find(data => data.year === year_param);
+                local_channelData.yearData[local_yearDataIndex] = channelData.yearData.find(data => data.year === yearParam);
                 flag = true;
             }
         }
@@ -786,7 +727,7 @@ function setLocalStorage(channelId, year_param, channelData) {
     }
     
     if(!flag) {
-        local_channelData.yearData.push(channelData.yearData.find(data => data.year === year_param));
+        local_channelData.yearData.push(channelData.yearData.find(data => data.year === yearParam));
     }
     
     localStorage.setItem(channelId, encodeURIComponent(JSON.stringify(local_channelData)));
@@ -997,4 +938,32 @@ function rebuildChannels() {
             }
         }
     }
+}
+
+function createNewChannelData(channelData) {
+    return {
+        channelId: channelData.channelId,
+        channelName: channelData.channelName,
+        channelImageUrl: channelData.channelImageUrl,
+        channelTotal: 0,
+        channelCount: 0,
+        cheese01: false,
+        cheeseDate01: null,
+        cheese02: false,
+        cheeseDate02: null,
+        cheese03: false,
+        cheeseDate03: null,
+        cheese04: false,
+        cheeseDate04: null,
+        firstCheeseDate: null,
+        onedayMaxCheese: 0,
+        onedayMaxCheeseDate: null,
+        yearData: []
+    }
+}
+
+function returnSelectboxIconArrow() {
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
+        <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
+    </svg>`;
 }

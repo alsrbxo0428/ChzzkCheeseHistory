@@ -118,25 +118,10 @@
                                                 <div class="form_box_button">
                                                     <div class="selectbox_container">
                                                         <input type="hidden" id="searchYear" value="2025" />
-                                                        <button type="button" class="selectbox_component" onclick="selectboxToggle();">
-                                                            <span class="selectbox_inner">
-                                                                0000년
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-                                                                    <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-                                                                </svg>
-                                                            </span>
+                                                        <button type="button" class="selectbox_component" data-key="search_year">
+                                                            <span class="selectbox_inner"></span>
                                                         </button>
-                                                        <ul class="selectbox_layer">
-                                                            <li class="selectbox_item">
-                                                                <button type="button" class="selectbox_option" onclick="chgSearchYear(2023);">2023년</button>
-                                                            </li>
-                                                            <li class="selectbox_item">
-                                                                <button type="button" class="selectbox_option" onclick="chgSearchYear(2024);">2024년</button>
-                                                            </li>
-                                                            <li class="selectbox_item">
-                                                                <button type="button" class="selectbox_option" onclick="chgSearchYear(2025);">2025년</button>
-                                                            </li>
-                                                        </ul>
+                                                        <ul class="selectbox_layer search_year_selectbox" data-visible="false"></ul>
                                                     </div>
                                                     <div class="search_wrap">
                                                         <div class="search_wrapper">
@@ -205,73 +190,16 @@
                                             </ul>
                                             <div class="selectbox" style="display: none;">
                                                 <div class="selectbox_container">
-                                                    <button class="selectbox_component" onclick="selectboxToggle2();">
-                                                        <span class="selectbox_inner">
-                                                            0000년
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-                                                                <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        </span>
+                                                    <button class="selectbox_component" data-key="calendar_year">
+                                                        <span class="selectbox_inner"></span>
                                                     </button>
-                                                    <ul class="selectbox_layer">
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarYear(2023);">2023년</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarYear(2024);">2024년</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarYear(2025);">2025년</button>
-                                                        </li>
-                                                    </ul>
+                                                    <ul class="selectbox_layer calendar_year_selectbox" data-visible="false"></ul>
                                                 </div>
                                                 <div class="selectbox_container">
-                                                    <button class="selectbox_component" onclick="selectboxToggle3();">
-                                                        <span class="selectbox_inner">
-                                                            0월
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" class="selectbox_icon_arrow">
-                                                                <path fill="currentColor" fill-rule="evenodd" d="M.21 2.209a.715.715 0 0 1 1.01 0L5 5.983 8.78 2.21a.715.715 0 0 1 1.01 0 .712.712 0 0 1 0 1.008L5 8 .21 3.217a.712.712 0 0 1 0-1.008Z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        </span>
+                                                    <button class="selectbox_component" data-key="calendar_month">
+                                                        <span class="selectbox_inner"></span>
                                                     </button>
-                                                    <ul class="selectbox_layer">
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(1);">1월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(2);">2월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(3);">3월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(4);">4월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(5);">5월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(6);">6월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(7);">7월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(8);">8월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(9);">9월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(10);">10월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(11);">11월</button>
-                                                        </li>
-                                                        <li class="selectbox_item">
-                                                            <button type="button" class="selectbox_option" onclick="chgCalendarMonth(12);">12월</button>
-                                                        </li>
-                                                    </ul>
+                                                    <ul class="selectbox_layer calendar_month_selectbox" data-visible="false"></ul>
                                                 </div>
                                                 <button type="button" id="button" class="button_container" onclick="rendarCalendar();" style="margin-left: 0px;">
                                                     <span class="button_inner">조회</span>
