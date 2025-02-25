@@ -1,14 +1,14 @@
-var channels = [];
-var channel = null;
-var selectboxFlag = true;
-var selectboxFlag2 = true;
-var selectboxFlag3 = true;
+let channels = [];
+let channel = null;
+let selectboxFlag = true;
+let selectboxFlag2 = true;
+let selectboxFlag3 = true;
 const monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const yearArr = [2023, 2024, 2025];
-var date = new Date();
-var year = date.getFullYear();
-var month = date.getMonth() + 1;
-var calendarDate = `${year}-${month}`;
+let date = new Date();
+let year = date.getFullYear();
+let month = date.getMonth() + 1;
+let calendarDate = `${year}-${month}`;
 
 chgSearchYear(year);
 chgCalendarYear(year);
@@ -189,6 +189,28 @@ function goDate(date) {
     chgCalendarDate(Number(splitedDate[0]), Number(splitedDate[1]), Number(splitedDate[2]));
 }
 
+function createNewChannelData(channelData) {
+    return {
+        channelId: channelData.channelId,
+        channelName: channelData.channelName,
+        channelImageUrl: channelData.channelImageUrl,
+        channelTotal: 0,
+        channelCount: 0,
+        cheese01: false,
+        cheeseDate01: null,
+        cheese02: false,
+        cheeseDate02: null,
+        cheese03: false,
+        cheeseDate03: null,
+        cheese04: false,
+        cheeseDate04: null,
+        firstCheeseDate: null,
+        onedayMaxCheese: 0,
+        onedayMaxCheeseDate: null,
+        yearData: []
+    }
+}
+
 async function readFile(event) {
     const files = event.target.files;
     const cheeseDataArr = await processFiles(files);
@@ -213,25 +235,7 @@ async function readFile(event) {
 
             let channelData = channels.find(channel => channel.channelId === cheeseData.channelId);
             if(!channelData) {
-                channelData = {
-                    channelId: cheeseData.channelId,
-                    channelName: cheeseData.channelName,
-                    channelImageUrl: cheeseData.channelImageUrl,
-                    channelTotal: 0,
-                    channelCount: 0,
-                    cheese01: false,
-                    cheeseDate01: null,
-                    cheese02: false,
-                    cheeseDate02: null,
-                    cheese03: false,
-                    cheeseDate03: null,
-                    cheese04: false,
-                    cheeseDate04: null,
-                    firstCheeseDate: null,
-                    onedayMaxCheese: 0,
-                    onedayMaxCheeseDate: null,
-                    yearData: []
-                }
+                channelData = createNewChannelData(cheeseData);
                 channels.push(channelData);
             }
 
@@ -576,13 +580,13 @@ function rendarCalendar(focusDay) {
         dates[i] += `
         <span class="${condition}">
             <h4>${date} 
-                    ${i >= firstDateIndex && i < lastDateIndex + 1 && channel ? (
-                        channel.cheese04 && channel.cheeseDate04 === makeDate(year, month, date) ? '<img src="./images/cheese04.png" class="cheeseDate">' :
-                        channel.cheese03 && channel.cheeseDate03 === makeDate(year, month, date) ? '<img src="./images/cheese03.png" class="cheeseDate">' :
-                        channel.cheese02 && channel.cheeseDate02 === makeDate(year, month, date) ? '<img src="./images/cheese02.png" class="cheeseDate">' :
-                        channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : 
-                        channel.firstCheeseDate === makeDate(year, month, date) ? '<img src="./images/fan_03.png" class="cheeseDate">' : ''
-                    ) : ''}
+                    ${i >= firstDateIndex && i < lastDateIndex + 1 && channel ? `<span class="cheeseDate_span">
+                        ${channel.firstCheeseDate === makeDate(year, month, date) ? '<img src="./images/fan_03.png" class="cheeseDate">' : ''}
+                        ${channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : ''}
+                        ${channel.cheese02 && channel.cheeseDate02 === makeDate(year, month, date) ? '<img src="./images/cheese02.png" class="cheeseDate">' : ''}
+                        ${channel.cheese03 && channel.cheeseDate03 === makeDate(year, month, date) ? '<img src="./images/cheese03.png" class="cheeseDate">' : ''}
+                        ${channel.cheese04 && channel.cheeseDate04 === makeDate(year, month, date) ? '<img src="./images/cheese04.png" class="cheeseDate">' : ''}
+                    </span>` : ''}
                 </h4>
         </span>`;
 
@@ -769,25 +773,7 @@ function setLocalStorage(channelId, year_param, channelData) {
             }
         }
     } else {
-        local_channelData = {
-            channelId: channelData.channelId,
-            channelName: channelData.channelName,
-            channelImageUrl: channelData.channelImageUrl,
-            channelTotal: 0,
-            channelCount: 0,
-            cheese01: false,
-            cheeseDate01: null,
-            cheese02: false,
-            cheeseDate02: null,
-            cheese03: false,
-            cheeseDate03: null,
-            cheese04: false,
-            cheeseDate04: null,
-            firstCheeseDate: null,
-            onedayMaxCheese: 0,
-            onedayMaxCheeseDate: null,
-            yearData: []
-        }
+        local_channelData = createNewChannelData(channelData);
     }
     
     if(!flag) {
@@ -915,25 +901,7 @@ function applyLocalStorage() {
                         
                         yearDataIndex = -1;
                     } else {
-                        channelData = {
-                            channelId: localChannelData.channelId,
-                            channelName: localChannelData.channelName,
-                            channelImageUrl: localChannelData.channelImageUrl,
-                            channelTotal: 0,
-                            channelCount: 0,
-                            cheese01: false,
-                            cheeseDate01: null,
-                            cheese02: false,
-                            cheeseDate02: null,
-                            cheese03: false,
-                            cheeseDate03: null,
-                            cheese04: false,
-                            cheeseDate04: null,
-                            firstCheeseDate: null,
-                            onedayMaxCheese: 0,
-                            onedayMaxCheeseDate: null,
-                            yearData: []
-                        }
+                        channelData = createNewChannelData(localChannelData);
                         channelData.yearData.push(localYearData);
                         channels.push(channelData);
                     }
@@ -988,23 +956,23 @@ function rebuildChannels() {
                             
                                 if(!channel.firstCheeseDate) channel.firstCheeseDate = makeDate(year, month, dayData.day);
                                 else if(!channel.firstCheeseDate.localeCompare(makeDate(year, month, dayData.day))) channel.firstCheeseDate = makeDate(year, month, dayData.day);
-                            
-                                if(!channel.cheese01 && channel.channelTotal > 100_000) {
+                                
+                                if(!channel.cheese01 && channel.channelTotal >= 100_000) {
                                     channel.cheese01 = true;
                                     channel.cheeseDate01 = makeDate(year, month, dayData.day);
                                 }
-                            
-                                if(!channel.cheese02 && channel.cheese01 && channel.channelTotal > 1_000_000) {
+                                
+                                if(!channel.cheese02 && channel.channelTotal >= 1_000_000) {
                                     channel.cheese02 = true;
                                     channel.cheeseDate02 = makeDate(year, month, dayData.day);
                                 }
-                            
-                                if(!channel.cheese03 && channel.cheese02 && channel.channelTotal > 10_000_000) {
+                                
+                                if(!channel.cheese03 && channel.channelTotal >= 10_000_000) {
                                     channel.cheese03 = true;
                                     channel.cheeseDate03 = makeDate(year, month, dayData.day);
                                 }
-                            
-                                if(!channel.cheese04 && channel.cheese03 && channel.channelTotal > 100_000_000) {
+                                
+                                if(!channel.cheese04 && channel.channelTotal >= 100_000_000) {
                                     channel.cheese04 = true;
                                     channel.cheeseDate04 = makeDate(year, month, dayData.day);
                                 }

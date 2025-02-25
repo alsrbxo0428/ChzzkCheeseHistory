@@ -642,9 +642,15 @@ table {
     color:rgba(0, 0, 0, .4);
 }
 
+.cheeseDate_span {
+    position: absolute;
+}
+
 .cheeseDate {
     height: 25px;
-    position: absolute;
+}
+
+.cheeseDate:first-child {
     margin-left: 5px;
 }
 
