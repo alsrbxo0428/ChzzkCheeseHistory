@@ -313,7 +313,13 @@
                             <div class="wrapper">
                                 <div id="guide" style="padding: 0; margin: 10px 10px 0 0;">
                                     <div class="form_wrapper">
-                                        <h3 class="form_title" style="text-align: initial;">파일 데이터</h3>
+                                        <div class="form_title_btn">
+                                            <h3 class="form_title" style="text-align: initial;">파일 데이터</h3>
+                                            <div>
+                                                <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                                <button class="button_container" onclick="saveLocalStorage();">데이터 저장</button>
+                                            </div>
+                                        </div>
                                         <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
                                             <colgroup>
                                                 <col>
@@ -349,17 +355,18 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-
-                                        <div class="cheeseHistListBtn">
-                                            <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
-                                            <button class="button_container" onclick="saveLocalStorage();">데이터 저장</button>
-                                        </div>
                                     </div>
                                 </div>
 
                                 <div id="guide" style="padding: 0; margin: 10px 0 0 10px;">
                                     <div class="form_wrapper">
-                                        <h3 class="form_title" style="text-align: initial;">로컬 스토리지</h3>
+                                        <div class="form_title_btn">
+                                            <h3 class="form_title" style="text-align: initial;">로컬 스토리지</h3>
+                                            <div>
+                                                <button class="button_container button_container_red" onclick="deleteCheckedLocalStorage();">선택삭제</button>
+                                                <button class="button_container" onclick="applyLocalStorage();">가져오기</button>
+                                            </div>
+                                        </div>
                                         <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
                                             <colgroup>
                                                 <col>
@@ -395,11 +402,6 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-
-                                        <div class="cheeseHistListBtn">
-                                            <button class="button_container button_container_red" onclick="deleteCheckedLocalStorage();">선택삭제</button>
-                                            <button class="button_container" onclick="applyLocalStorage();">가져오기</button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
