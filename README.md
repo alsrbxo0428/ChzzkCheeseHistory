@@ -1,5 +1,5 @@
 ## 치지직 치즈 후원 내역
-링크 : https://alsrbxo0428.github.io/ChzzkCheeseHistory/
+링크 : https://chzzk-cheese-history.pages.dev/
 
 개인적으로 스트리머별 후원 내역을 확인하고 싶어 제작했으며, Windows OS 및 PC에서의 사용을 전제로 제작하였습니다.\
 추후 치지직의 API 데이터 제공 방식 및 구조가 변경될 경우 기능이 정상적으로 동작하지 않을 수 있습니다.
@@ -8,6 +8,10 @@
 - `Chart.js`
 
 ## 업데이트 내역
+
+### 2025.02.28
+- 치지직 치즈 후원 내역 링크 변경
+    - Github pages -> Cloudflare pages 변경
 
 ### 2025.02.27
 - 로컬 스토리지 팝업 내 버튼 위치 변경

@@ -945,6 +945,10 @@ function rebuildChannels() {
     }
 }
 
+function goSseu() {
+    console.log('쓰봉 화이팅!');
+}
+
 function createNewChannelData(channelData) {
     return {
         channelId: channelData.channelId,
