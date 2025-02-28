@@ -176,6 +176,8 @@ async function readFile(event) {
         });
 
         for(let cheeseData of cheeseDataArr) {
+            if(cheeseData.donationType === "TTS") continue;
+
             let splitedPurchaseDate = cheeseData.purchaseDate.split(' ')[0].split('-');
             let purchaseYear = Number(splitedPurchaseDate[0]);
             let purchaseMonth = Number(splitedPurchaseDate[1]);
