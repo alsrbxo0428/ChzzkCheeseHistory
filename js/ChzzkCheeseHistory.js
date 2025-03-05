@@ -124,11 +124,11 @@ function chgView(type) {
 }
 
 function chgCalendarDate(yearParam, monthParam, focusDay) {
-    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${year}년` + returnSelectboxIconArrow();
-    document.getElementsByClassName("selectbox_inner")[2].innerHTML = `${month}월` + returnSelectboxIconArrow();
-
     year = yearParam;
     month = monthParam;
+    
+    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${year}년` + returnSelectboxIconArrow();
+    document.getElementsByClassName("selectbox_inner")[2].innerHTML = `${month}월` + returnSelectboxIconArrow();
     rendarCalendar(focusDay);
 }
 
@@ -945,10 +945,6 @@ function rebuildChannels() {
             }
         }
     }
-}
-
-function goSseu() {
-    console.log('쓰봉 화이팅!');
 }
 
 function createNewChannelData(channelData) {

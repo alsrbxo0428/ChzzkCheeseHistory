@@ -9,6 +9,9 @@
 
 ## 업데이트 내역
 
+### 2025.03.05
+- chgCalendarDate 함수 동작 로직 순서 수정
+
 ### 2025.02.28
 - 치지직 치즈 후원 내역 링크 변경
     - Github pages -> Cloudflare pages 변경
