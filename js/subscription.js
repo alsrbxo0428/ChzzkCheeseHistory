@@ -964,11 +964,12 @@ function rebuildChannels() {
                 if(yearData) {
                     for(let month of monthArr) {
                         let monthData = yearData.monthData.find(data => data.month === month);
+                        
                         if(monthData && monthData.dayData) {
                             for(let dayData of monthData.dayData) {
                                 channel.channelTotal += dayData.dayTotal;
-                                channel.channelCount1 += dayData.dayCount1;
-                                channel.channelCount2 += dayData.dayCount2;
+                                channel.channelCount1 += yearData.yearCount1;
+                                channel.channelCount2 += yearData.yearCount2;
                                 
                                 if(!channel.subscription1 && channel.channelTotal >= 1) {
                                     channel.subscription1 = true;

@@ -918,15 +918,14 @@ function rebuildChannels() {
                 let yearData = channel.yearData.find(data => data.year === year);
 
                 if(yearData) {
-                    channel.channelTotal += yearData.yearTotal;
-                    channel.channelCount += yearData.yearCount;
-
                     for(let month of monthArr) {
                         let monthData = yearData.monthData.find(data => data.month === month);
-
+                        
                         if(monthData && monthData.dayData) {
                             for(let dayData of monthData.dayData) {
-                            
+                                channel.channelTotal += dayData.dayTotal;
+                                channel.channelCount += dayData.dayCount;
+
                                 if(!channel.firstCheeseDate) channel.firstCheeseDate = makeDate(year, month, dayData.day);
                                 else if(!channel.firstCheeseDate.localeCompare(makeDate(year, month, dayData.day))) channel.firstCheeseDate = makeDate(year, month, dayData.day);
                                 
@@ -959,8 +958,6 @@ function rebuildChannels() {
                     }
                 }
             }
-
-            console.log(`${channel.channelName} : ${channel.channelCount}`);
         }
     }
 }
