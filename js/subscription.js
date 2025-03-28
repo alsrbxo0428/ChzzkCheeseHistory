@@ -6,11 +6,10 @@ let month = date.getMonth() + 1;
 let calendarDate = `${year}-${month}`;
 
 const monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-const yearArr = [2023, 2024, 2025];
+const yearArr = [2024, 2025];
 const selectboxState = {};
 
 document.addEventListener("DOMContentLoaded", function() {
-    chgSearchYear(year);
     chgCalendarYear(year);
     chgCalendarMonth(month);
     
@@ -25,15 +24,12 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("size").addEventListener("blur", handleFocusChangeSize);
 
     let year_selectbox_items = ``;
-    for(let i = 0; i < 2; i++) {
-        year_selectbox_items = ``;
-        for(let year of yearArr) {
-            year_selectbox_items += `<li class="selectbox_item">
-                <button type="button" class="selectbox_option" onclick="${i == 0 ? "chgSearchYear" : "chgCalendarYear"}(${year});">${year}년</button>
-            </li>`;
-        }
-        document.querySelector(i == 0 ? ".search_year_selectbox" : ".calendar_year_selectbox").innerHTML = year_selectbox_items;
+    for(let year of yearArr) {
+        year_selectbox_items += `<li class="selectbox_item">
+            <button type="button" class="selectbox_option" onclick="chgCalendarYear(${year});">${year}년</button>
+        </li>`;
     }
+    document.querySelector(".calendar_year_selectbox").innerHTML = year_selectbox_items;
 
     let month_selectbox_items = ``;
     for(let month of monthArr) {
@@ -72,30 +68,23 @@ function handleFocusChangeSize(event) {
 function openHistory() {
     if(document.getElementById("size").value == null || document.getElementById("size").value == '') {
         document.getElementById("size").value = 10000;
-        document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=${document.getElementById("size").value}&searchYear=${document.getElementById("searchYear").value}`;
+        document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/gift/subscription/send-history?page=0&size=${document.getElementById("size").value}`;
     }
-
+    
     document.getElementById("apiLink").click();
 }
 
-function chgSearchYear(yearParam) {
-    document.getElementById("searchYear").value = yearParam;
-    document.getElementsByClassName("selectbox_inner")[0].innerHTML = `${yearParam}년` + returnSelectboxIconArrow();
-
-    chgUrl();
-}
-
 function chgUrl() {
-    document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/product/purchase/history?page=0&size=${document.getElementById("size").value}&searchYear=${document.getElementById("searchYear").value}`;
+    document.getElementById("apiLink").href = `https://api.chzzk.naver.com/commercial/v1/gift/subscription/send-history?page=0&size=${document.getElementById("size").value}`;
 }
 
 function chgCalendarYear(yearParam) {
-    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${yearParam}년` + returnSelectboxIconArrow();
+    document.getElementsByClassName("selectbox_inner")[0].innerHTML = `${yearParam}년` + returnSelectboxIconArrow();
     year = yearParam;
 }
 
 function chgCalendarMonth(monthParam) {
-    document.getElementsByClassName("selectbox_inner")[2].innerHTML = `${monthParam}월` + returnSelectboxIconArrow();
+    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${monthParam}월` + returnSelectboxIconArrow();
     month = monthParam;
 }
 
@@ -127,8 +116,8 @@ function chgCalendarDate(yearParam, monthParam, focusDay) {
     year = yearParam;
     month = monthParam;
     
-    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${year}년` + returnSelectboxIconArrow();
-    document.getElementsByClassName("selectbox_inner")[2].innerHTML = `${month}월` + returnSelectboxIconArrow();
+    document.getElementsByClassName("selectbox_inner")[0].innerHTML = `${year}년` + returnSelectboxIconArrow();
+    document.getElementsByClassName("selectbox_inner")[1].innerHTML = `${month}월` + returnSelectboxIconArrow();
     rendarCalendar(focusDay);
 }
 
@@ -162,74 +151,113 @@ function goToday() {
 
 async function readFile(event) {
     const files = event.target.files;
-    const cheeseDataArr = await processFiles(files);
+    const subscriptionDataArr = await processFiles(files);
     
     channels = [];
     document.getElementById("fileList").innerText = `등록된 파일: ${files.length}건`;
     document.getElementById("channelHistoryWrap").dataset.visible = "none";
 
-    if(cheeseDataArr) {
-        cheeseDataArr.sort((a, b) => {
-            if(a.purchaseDate < b.purchaseDate) return -1;
-            if(a.purchaseDate > b.purchaseDate) return 1;
+    if(subscriptionDataArr) {
+        subscriptionDataArr.sort((a, b) => {
+            if(a.historyDate < b.historyDate) return -1;
+            if(a.historyDate > b.historyDate) return 1;
             return 0;
         });
 
-        for(let cheeseData of cheeseDataArr) {
-            if(cheeseData.donationType === "TTS") continue;
+        for(let subscriptionData of subscriptionDataArr) {
+            let splitedHistoryDate = subscriptionData.historyDate.split(' ')[0].split('-');
+            let historyYear = Number(splitedHistoryDate[0]);
+            let historyMonth = Number(splitedHistoryDate[1]);
+            let historyDay = Number(splitedHistoryDate[2]);
 
-            let splitedPurchaseDate = cheeseData.purchaseDate.split(' ')[0].split('-');
-            let purchaseYear = Number(splitedPurchaseDate[0]);
-            let purchaseMonth = Number(splitedPurchaseDate[1]);
-            let purchaseDay = Number(splitedPurchaseDate[2]);
-            let payAmount = Number(cheeseData.payAmount);
+            let historyStatus = subscriptionData.historyStatus;
+            let tier = subscriptionData.tier;
+            let quantity = subscriptionData.quantity;
 
-            let channelData = channels.find(channel => channel.channelId === cheeseData.channelId);
+            let channelData = channels.find(channel => channel.channelId === subscriptionData.channelId);
             if(!channelData) {
-                channelData = createNewChannelData(cheeseData);
+                channelData = createNewChannelData(subscriptionData);
                 channels.push(channelData);
             }
 
-            let yearData = channelData.yearData.find(data => data.year === purchaseYear);
+            let yearData = channelData.yearData.find(data => data.year === historyYear);
             if(!yearData) {
                 yearData = {
-                    year: purchaseYear,
+                    year: historyYear,
                     yearTotal: 0,
-                    yearCount: 0,
+                    yearCount1: 0,
+                    yearCount2: 0,
+                    yearCancel1: 0,
+                    yearCancel2: 0,
                     monthData: []
                 }
                 channelData.yearData.push(yearData);
             }
-
-            yearData.yearTotal += payAmount;
-            yearData.yearCount++;
             
-            let monthData = yearData.monthData.find(data => data.month === purchaseMonth);
+            let monthData = yearData.monthData.find(data => data.month === historyMonth);
             if(!monthData) {
                 monthData = {
-                    month: purchaseMonth,
+                    month: historyMonth,
                     monthTotal: 0,
-                    monthCount: 0,
+                    monthCount1: 0,
+                    monthCount2: 0,
+                    monthCancel1: 0,
+                    monthCancel2: 0,
                     dayData: []
                 }
                 yearData.monthData.push(monthData);
             }
 
-            monthData.monthTotal += payAmount;
-            monthData.monthCount++;
-
-            let dayData = monthData.dayData.find(data => data.day === purchaseDay);
+            let dayData = monthData.dayData.find(data => data.day === historyDay);
             if(!dayData) {
                 dayData = {
-                    day: purchaseDay,
+                    day: historyDay,
                     dayTotal: 0,
-                    dayCount: 0
+                    dayCount1: 0,
+                    dayCount2: 0,
+                    dayCancel1: 0,
+                    dayCancel2: 0,
                 }
                 monthData.dayData.push(dayData);
             }
 
-            dayData.dayTotal += payAmount;
-            dayData.dayCount++;
+            if("COMPLETED" === historyStatus) {
+                yearData.yearTotal += quantity;
+                monthData.monthTotal += quantity;
+                dayData.dayTotal += quantity;
+
+                if("TIER_1" === tier) {
+                    yearData.yearCount1 += quantity;
+                    monthData.monthCount1 += quantity;
+                    dayData.dayCount1 += quantity;
+                } else if("TIER_2" === tier) {
+                    yearData.yearCount2 += quantity;
+                    monthData.monthCount2 += quantity;
+                    dayData.dayCount2 += quantity;
+                }
+            } else if("PARTIAL_REFUND" === historyStatus) {
+                yearData.yearTotal -= quantity;
+                monthData.monthTotal -= quantity;
+                dayData.dayTotal -= quantity;
+
+                if("TIER_1" === tier) {
+                    yearData.yearCount1 -= quantity;
+                    monthData.monthCount1 -= quantity;
+                    dayData.dayCount1 -= quantity;
+
+                    yearData.yearCancel1 += quantity;
+                    monthData.monthCancel1 += quantity;
+                    dayData.dayCancel1 += quantity;
+                } else if("TIER_2" === tier) {
+                    yearData.yearCount2 -= quantity;
+                    monthData.monthCount2 -= quantity;
+                    dayData.dayCount2 -= quantity;
+
+                    yearData.yearCancel2 += quantity;
+                    monthData.monthCancel2 += quantity;
+                    dayData.dayCancel2 += quantity;
+                }
+            }
         }
     }
 
@@ -270,14 +298,19 @@ function initializationHtml() {
 
     rebuildChannels();
 
-    let totalPayAmount = 0;
+    let total = 0;
+    let count1 = 0;
+    let count2 = 0;
     for(let channel of channels) {
-        totalPayAmount += channel.channelTotal;
+        total += channel.channelTotal;
+        count1 += channel.channelCount1;
+        count2 += channel.channelCount2;
     }
 
     document.getElementById("channelInfo").innerText = '';
     document.getElementById("channelInfoYear").innerText = '';
-    document.getElementById("totalPayAmount").innerText = `전체 후원 금액 : ${totalPayAmount.toLocaleString("ko-KR")}원`;
+    document.getElementById("channelHistoryWrap").dataset.visible = "none";
+    document.getElementById("totalPayAmount").innerText = `구독선물 횟수 : ${total}회(All) / ${count1}회(1T) / ${count2}회(2T)`;
     document.getElementById("channelListContainer").innerHTML = makeList(channels);
     if(channels.length > 0) {
         document.getElementById("channelListContainer").dataset.visible = "block";
@@ -285,13 +318,13 @@ function initializationHtml() {
 }
 
 function makeFileDataList() {
-    let cheeseHistListHtml = '';
+    let subscriptionHistListHtml = '';
     let cnt = 1;
 
     if(channels.length > 0) {
         for(let channelData of channels) {
             for(let i = 0; i < channelData.yearData.length; i++) {
-                cheeseHistListHtml += `
+                subscriptionHistListHtml += `
                 <tr>
                     <td>${cnt++}</td>
                     <td>${channelData.channelName}</td>
@@ -299,7 +332,7 @@ function makeFileDataList() {
                     <td>
                         <div class="check-box">
                             <label for="file_${channelData.channelId}_${channelData.yearData[i].year}">
-                                <input type="checkbox" id="file_${channelData.channelId}_${channelData.yearData[i].year}" name="file_cheeseHistList" value="${channelData.channelId}_${channelData.yearData[i].year}" checked />
+                                <input type="checkbox" id="file_${channelData.channelId}_${channelData.yearData[i].year}" name="file_subscriptionHistList" value="${channelData.channelId}_${channelData.yearData[i].year}" checked />
                                 <div class="chkbox">
                                     <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
                                         <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
@@ -313,7 +346,7 @@ function makeFileDataList() {
             }
         }
     } else {
-        cheeseHistListHtml += `
+        subscriptionHistListHtml += `
         <tr>
             <td colspan="3">
                 <p>저장된 데이터가 없습니다.</p>
@@ -321,7 +354,7 @@ function makeFileDataList() {
         </tr>`;
     }
     
-    document.getElementById("cheeseHistList").innerHTML = cheeseHistListHtml;
+    document.getElementById("subscriptionHistList").innerHTML = subscriptionHistListHtml;
 }
 
 function makeList(channels) {
@@ -338,16 +371,19 @@ function makeList(channels) {
                 <span>
                     <img id="cheeseImg" 
                         ${
-                            channel.cheese04 ? 'src="./images/cheese04.png"' :
-                            channel.cheese03 ? 'src="./images/cheese03.png"' :
-                            channel.cheese02 ? 'src="./images/cheese02.png"' :
-                            channel.cheese01 ? 'src="./images/cheese01.png"' : ''
+                            channel.subscription1000 ? 'src="./images/gift_sub_1000.png"' :
+                            channel.subscription500 ? 'src="./images/gift_sub_500.png"' :
+                            channel.subscription250 ? 'src="./images/gift_sub_250.png"' :
+                            channel.subscription100 ? 'src="./images/gift_sub_100.png"' :
+                            channel.subscription50 ? 'src="./images/gift_sub_50.png"' :
+                            channel.subscription10 ? 'src="./images/gift_sub_10.png"' :
+                            channel.subscription1 ? 'src="./images/gift_sub_1.png"' : ''
                         }
                     >
                     <img id="channelImg" src="${channel.channelImageUrl}" />
                 </span>
                 <p>${channel.channelName}</p>
-                <p>${Number(channel.channelTotal).toLocaleString("ko-KR")}원</p>
+                <p>총 ${Number(channel.channelTotal).toLocaleString("ko-KR")}회</p>
             </button>
         `).join('')}
     </div>`;
@@ -360,14 +396,14 @@ function getChannelHistory(channelId) {
     channel = channels.find(channel => channel.channelId === channelId);
     
     document.getElementById("channelHistoryWrap").dataset.visible = "block";
-    document.getElementById("channelInfo").innerText = `${channel.channelName} 총 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원 (${channel.channelCount}회)`;
+    document.getElementById("channelInfo").innerText = `${channel.channelName} 구독선물 횟수 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}회(ALL) / ${Number(channel.channelCount1).toLocaleString("ko-KR")}회(1T) / ${Number(channel.channelCount2).toLocaleString("ko-KR")}회(2T)`;
 
     if(channel.yearData.length > 0) {
         let yearIdx = -1;
         for(let year of yearArr) {
             yearIdx = channel.yearData.findIndex(data => data.year === year);
             if(yearIdx !== -1) {
-                channelInfoYear += `<li>${channel.yearData[yearIdx].year}년 : ${Number(channel.yearData[yearIdx].yearTotal).toLocaleString("ko-KR")}원 (${channel.yearData[yearIdx].yearCount}회)</li>`;
+                channelInfoYear += `<li>${channel.yearData[yearIdx].year}년 : ${Number(channel.yearData[yearIdx].yearTotal).toLocaleString("ko-KR")}회(ALL) / ${Number(channel.yearData[yearIdx].yearCount1).toLocaleString("ko-KR")}회(1T) / ${Number(channel.yearData[yearIdx].yearCount2).toLocaleString("ko-KR")}회(2T)</li>`;
                 yearIdx = -1;
             }
         }
@@ -399,25 +435,25 @@ function renderMonthlyChart() {
                             return `${tooltipItems[0].dataset.label} ${tooltipItems[0].label}`;
                         },
                         label: function(tooltipItem) {
-                            return `후원 금액: ${tooltipItem.formattedValue}원`;
+                            return `총 구독선물 횟수: ${tooltipItem.formattedValue}회`;
                         },
                         footer: function(tooltipItem) {
                             let year = Number(tooltipItem[0].dataset.label.replace(/[^0-9]/g, ''));
                             let yearData = channel.yearData.find(data => data.year === year);
                             let dataIdx = tooltipItem[0].dataIndex;
-                            let monthCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            let monthCount = ["", "", "", "", "", "", "", "", "", "", "", ""];
 
                             if(yearData) {
                                 let monthData = null;
                                 for(let month of monthArr) {
                                     monthData = yearData.monthData.find(data => data.month === month);
                                     if(monthData) {
-                                        monthCount[month - 1] = monthData.monthCount;
+                                        monthCount[month - 1] = `${monthData.monthCount1}회(1T) / ${monthData.monthCount2}회(2T)`;
                                     }
                                 }
                             }
 
-                            return `후원 횟수: ${monthCount[dataIdx]}회`;
+                            return `티어별 구독선물 횟수: ${monthCount[dataIdx]}`;
                         }
                     }
                 }
@@ -432,7 +468,7 @@ function renderMonthlyChart() {
                 y: {
                     title: {
                         display: true,
-                        text: '후원 금액 (원)'
+                        text: '구독선물 횟수'
                     }
                 }
             }
@@ -483,15 +519,17 @@ function rendarCalendar(focusDay) {
         yearData = channel.yearData.find(data => data.year === year);
         monthData = yearData ? yearData.monthData.find(data => data.month === month) : null;
 
-        document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthData ? (`<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)</h3>`) : `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
-        document.getElementsByClassName("cheese_history")[0].innerHTML = `
+        document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthData ? `<h3>${month}월 구독선물 횟수 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}회(All) / ${Number(monthData.monthCount1).toLocaleString("ko-KR")}회(1T) / ${Number(monthData.monthCount2).toLocaleString("ko-KR")}회(2T)</h3>` : `<h3>${month}월 구독선물 횟수 : 0회(All) / 0회(1T) / 0회(2T)</h3>`;
+        document.getElementsByClassName("subscription_history")[0].innerHTML = `
         <ul>
             <li><button onclick="goToday();"><h4>TODAY</h4></button></li>
-            ${channel.onedayMaxCheese > 0 ? `<li><button onclick="goDate('${channel.onedayMaxCheeseDate}');"><h4>최고후원금액 : ${Number(channel.onedayMaxCheese).toLocaleString("ko-KR")}원</h4></button></li>` : ''}
-            ${channel.cheese01 ? `<li><button onclick="goDate('${channel.cheeseDate01}');"><img src="./images/cheese01.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese02 ? `<li><button onclick="goDate('${channel.cheeseDate02}');"><img src="./images/cheese02.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese03 ? `<li><button onclick="goDate('${channel.cheeseDate03}');"><img src="./images/cheese03.png" class="cheese_history_button"></button></li>` : ''}
-            ${channel.cheese04 ? `<li><button onclick="goDate('${channel.cheeseDate04}');"><img src="./images/cheese04.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription1 ? `<li><button onclick="goDate('${channel.subscriptionDate1}');"><img src="./images/gift_sub_1.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription10 ? `<li><button onclick="goDate('${channel.subscriptionDate10}');"><img src="./images/gift_sub_10.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription50 ? `<li><button onclick="goDate('${channel.subscriptionDate50}');"><img src="./images/gift_sub_50.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription100 ? `<li><button onclick="goDate('${channel.subscriptionDate100}');"><img src="./images/gift_sub_100.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription250 ? `<li><button onclick="goDate('${channel.subscriptionDate250}');"><img src="./images/gift_sub_250.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription500 ? `<li><button onclick="goDate('${channel.subscriptionDate500}');"><img src="./images/gift_sub_500.png" class="cheese_history_button"></button></li>` : ''}
+            ${channel.subscription1000 ? `<li><button onclick="goDate('${channel.subscriptionDate1000}');"><img src="./images/gift_sub_1000.png" class="cheese_history_button"></button></li>` : ''}
         </ul>`;
     }
     
@@ -535,11 +573,13 @@ function rendarCalendar(focusDay) {
         <span class="${condition}">
             <h4>${date} 
                     ${i >= firstDateIndex && i < lastDateIndex + 1 && channel ? `<span class="cheeseDate_span">
-                        ${channel.firstCheeseDate === makeDate(year, month, date) ? '<img src="./images/fan_03.png" class="cheeseDate">' : ''}
-                        ${channel.cheese01 && channel.cheeseDate01 === makeDate(year, month, date) ? '<img src="./images/cheese01.png" class="cheeseDate">' : ''}
-                        ${channel.cheese02 && channel.cheeseDate02 === makeDate(year, month, date) ? '<img src="./images/cheese02.png" class="cheeseDate">' : ''}
-                        ${channel.cheese03 && channel.cheeseDate03 === makeDate(year, month, date) ? '<img src="./images/cheese03.png" class="cheeseDate">' : ''}
-                        ${channel.cheese04 && channel.cheeseDate04 === makeDate(year, month, date) ? '<img src="./images/cheese04.png" class="cheeseDate">' : ''}
+                        ${channel.subscription1 && channel.subscriptionDate1 === makeDate(year, month, date) ? '<img src="./images/gift_sub_1.png" class="cheeseDate">' : ''}
+                        ${channel.subscription10 && channel.subscriptionDate10 === makeDate(year, month, date) ? '<img src="./images/gift_sub_10.png" class="cheeseDate">' : ''}
+                        ${channel.subscription50 && channel.subscriptionDate50 === makeDate(year, month, date) ? '<img src="./images/gift_sub_50.png" class="cheeseDate">' : ''}
+                        ${channel.subscription100 && channel.subscriptionDate100 === makeDate(year, month, date) ? '<img src="./images/gift_sub_100.png" class="cheeseDate">' : ''}
+                        ${channel.subscription250 && channel.subscriptionDate250 === makeDate(year, month, date) ? '<img src="./images/gift_sub_250.png" class="cheeseDate">' : ''}
+                        ${channel.subscription500 && channel.subscriptionDate500 === makeDate(year, month, date) ? '<img src="./images/gift_sub_500.png" class="cheeseDate">' : ''}
+                        ${channel.subscription1000 && channel.subscriptionDate1000 === makeDate(year, month, date) ? '<img src="./images/gift_sub_1000.png" class="cheeseDate">' : ''}
                     </span>` : ''}
                 </h4>
         </span>`;
@@ -550,8 +590,9 @@ function rendarCalendar(focusDay) {
             dayData = monthData.dayData.find(data => data.day === date);
             if(i >= firstDateIndex && i < lastDateIndex + 1 && dayData) {
                 dates[i] += `
-                    <li>${Number(dayData.dayTotal).toLocaleString("ko-KR")}원</li>
-                    <li>(${dayData.dayCount}회)</li>
+                    <li>ALL : ${dayData.dayTotal}회</li>
+                    <li>1T : ${dayData.dayCount1}회</li>
+                    <li>2T : ${dayData.dayCount2}회</li>
                 `;
             }
 
@@ -607,12 +648,12 @@ function loadLocalStorageDataList() {
     let channelName = null;
     let channelYear = null;
     let channelYearDataArr = null;
-    let cheeseHistListHtml = '';
+    let subscriptionHistListHtml = '';
     let cnt = 1;
     
     let localStorageKeys = Object.keys(localStorage);
     for(let key of localStorageKeys) {
-        if(key.indexOf('_subscription') < 0) {
+        if(key.indexOf('_subscription') > -1) {
             channelData = getLocalStorageChannelData(key);
             if(!channelData.yearData || channelData.yearData.length === 0) localStorage.removeItem(key);
         }
@@ -621,17 +662,17 @@ function loadLocalStorageDataList() {
     
     if(localStorageKeys.length > 0) {
         for(let key of localStorageKeys) {
-            if(key.indexOf('_subscription') < 0) {
+            if(key.indexOf('_subscription') > -1) {
                 tmpChannels.push(getLocalStorageChannelData(key));
             }
         }
-        
+
         if(tmpChannels.length > 0) {
             tmpChannels.sort((a, b) => a.channelName.localeCompare(b.channelName));
             
             for(let channel of tmpChannels) {
                 channel.yearData.sort((a, b) => a.year - b.year);
-    
+
                 channelId = channel.channelId;
                 channelName = channel.channelName;
                 channelYearDataArr = channel.yearData;
@@ -640,7 +681,7 @@ function loadLocalStorageDataList() {
                     if(!yearData) continue;
                     channelYear = yearData.year;
                     
-                    cheeseHistListHtml += `
+                    subscriptionHistListHtml += `
                     <tr>
                         <td>${cnt++}</td>
                         <td>${channelName}</td>
@@ -648,7 +689,7 @@ function loadLocalStorageDataList() {
                         <td>
                             <div class="check-box">
                                 <label for="localStorage_${channelId}_${channelYear}">
-                                    <input type="checkbox" id="localStorage_${channelId}_${channelYear}" name="localStorage_cheeseHistList" value="${channelId}_${channelYear}" checked />
+                                    <input type="checkbox" id="localStorage_${channelId}_${channelYear}" name="localStorage_subscriptionHistList" value="${channelId}_${channelYear}" checked />
                                     <div class="chkbox">
                                         <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
                                             <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
@@ -662,7 +703,7 @@ function loadLocalStorageDataList() {
                 }
             }
         } else {
-            cheeseHistListHtml += `
+            subscriptionHistListHtml += `
             <tr>
                 <td colspan="3">
                     <p>저장된 데이터가 없습니다.</p>
@@ -670,7 +711,7 @@ function loadLocalStorageDataList() {
             </tr>`;
         }
     } else {
-        cheeseHistListHtml += `
+        subscriptionHistListHtml += `
         <tr>
             <td colspan="3">
                 <p>저장된 데이터가 없습니다.</p>
@@ -678,7 +719,7 @@ function loadLocalStorageDataList() {
         </tr>`;
     }
     
-    document.getElementById("cheeseHistLocalStorageList").innerHTML = cheeseHistListHtml;
+    document.getElementById("subscriptionHistLocalStorageList").innerHTML = subscriptionHistListHtml;
     document.getElementById("localStorage_allCheck").checked = true;
 }
 
@@ -686,11 +727,11 @@ function allCheck(id) {
     let isChecked = document.getElementById(id).checked;
 
     if("file_allCheck" === id) {
-        document.querySelectorAll("input[name='file_cheeseHistList']").forEach((input) => {
+        document.querySelectorAll("input[name='file_subscriptionHistList']").forEach((input) => {
             input.checked = isChecked;
         });
     } else if("localStorage_allCheck") {
-        document.querySelectorAll("input[name='localStorage_cheeseHistList']").forEach((input) => {
+        document.querySelectorAll("input[name='localStorage_subscriptionHistList']").forEach((input) => {
             input.checked = isChecked;
         });
     }
@@ -701,7 +742,7 @@ function getLocalStorageChannelData(channelId) {
 }
 
 function saveLocalStorage() {
-    let checkedList = document.querySelectorAll("input[name='file_cheeseHistList']:checked");
+    let checkedList = document.querySelectorAll("input[name='file_subscriptionHistList']:checked");
     
     if(checkedList.length > 0) {
         let checkedValue = null;
@@ -717,7 +758,8 @@ function saveLocalStorage() {
     
             channelData = channels.find(channel => channel.channelId === channelId);
             if(channelData) {
-                setLocalStorage(channelId, yearParam, channelData);
+                console.log();
+                setLocalStorage(`${channelId}_subscription`, yearParam, channelData);
                 count++;
             }
         }
@@ -756,7 +798,7 @@ function setLocalStorage(channelId, yearParam, channelData) {
 }
 
 function deleteCheckedLocalStorage() {
-    let checkedList = document.querySelectorAll("input[name='localStorage_cheeseHistList']:checked");
+    let checkedList = document.querySelectorAll("input[name='localStorage_subscriptionHistList']:checked");
     
     if(checkedList.length > 0) {
         let isConfirm = confirm(`${checkedList.length}건의 데이터가 삭제됩니다.\n정말 삭제하시겠습니까?`);
@@ -793,8 +835,7 @@ function deleteCheckedLocalStorage() {
             
             if(deleteDatas.length > 0) {
                 for(let deleteData of deleteDatas) {
-                    channelData = getLocalStorageChannelData(deleteData.channelId);
-
+                    channelData = getLocalStorageChannelData(`${deleteData.channelId}_subscription`);
                     for(let year of deleteData.year) {
                         yearDataIndex = channelData.yearData.findIndex(yearData => yearData.year === year);
                         if(yearDataIndex !== -1) {
@@ -802,8 +843,8 @@ function deleteCheckedLocalStorage() {
                         }
                         yearDataIndex = -1;
                     }
-
-                    localStorage.setItem(channelData.channelId, encodeURIComponent(JSON.stringify(channelData)));
+                    
+                    localStorage.setItem(`${channelData.channelId}_subscription`, encodeURIComponent(JSON.stringify(channelData)));
                     channelData = null;
                 }
             }
@@ -816,7 +857,7 @@ function deleteCheckedLocalStorage() {
 }
 
 function applyLocalStorage() {
-    let checkedList = document.querySelectorAll("input[name='localStorage_cheeseHistList']:checked");
+    let checkedList = document.querySelectorAll("input[name='localStorage_subscriptionHistList']:checked");
     
     if(checkedList.length > 0) {
         let checkedDatas = [];
@@ -856,7 +897,7 @@ function applyLocalStorage() {
 
         if(checkedDatas.length > 0) {
             for(let checkedData of checkedDatas) {
-                localChannelData = getLocalStorageChannelData(checkedData.channelId);
+                localChannelData = getLocalStorageChannelData(`${checkedData.channelId}_subscription`);
 
                 for(let year of checkedData.year) {
                     localYearData = localChannelData.yearData.find(yearData => yearData.year === year);
@@ -899,70 +940,77 @@ function rebuildChannels() {
 
         for(let channel of channels) {
             channel.channelTotal = 0;
-            channel.channelCount = 0;
-            channel.cheese01 = false;
-            channel.cheeseDate01 = null;
-            channel.cheese02 = false;
-            channel.cheeseDate02 = null;
-            channel.cheese03 = false;
-            channel.cheeseDate03 = null;
-            channel.cheese04 = false;
-            channel.cheeseDate04 = null;
-            channel.firstCheeseDate = null;
-            channel.onedayMaxCheese = 0;
-            channel.onedayMaxCheeseDate = null;
+            channel.channelCount1 = 0;
+            channel.channelCount2 = 0;
+            channel.subscription1 = false;
+            channel.subscriptionDate1 = null;
+            channel.subscription10 = false;
+            channel.subscriptionDate10 = null;
+            channel.subscription50 = false;
+            channel.subscriptionDate50 = null;
+            channel.subscription100 = false;
+            channel.subscriptionDate100 = null;
+            channel.subscription250 = false;
+            channel.subscriptionDate250 = null;
+            channel.subscription500 = false;
+            channel.subscriptionDate500 = null;
+            channel.subscription1000 = false;
+            channel.subscriptionDate1000 = null;
 
             channel.yearData.sort((a, b) => a.year - b.year);
 
             for(let year of yearArr) {
                 let yearData = channel.yearData.find(data => data.year === year);
-
                 if(yearData) {
-                    channel.channelTotal += yearData.yearTotal;
-                    channel.channelCount += yearData.yearCount;
-
                     for(let month of monthArr) {
                         let monthData = yearData.monthData.find(data => data.month === month);
-
                         if(monthData && monthData.dayData) {
                             for(let dayData of monthData.dayData) {
-                            
-                                if(!channel.firstCheeseDate) channel.firstCheeseDate = makeDate(year, month, dayData.day);
-                                else if(!channel.firstCheeseDate.localeCompare(makeDate(year, month, dayData.day))) channel.firstCheeseDate = makeDate(year, month, dayData.day);
+                                channel.channelTotal += dayData.dayTotal;
+                                channel.channelCount1 += dayData.dayCount1;
+                                channel.channelCount2 += dayData.dayCount2;
                                 
-                                if(!channel.cheese01 && channel.channelTotal >= 100_000) {
-                                    channel.cheese01 = true;
-                                    channel.cheeseDate01 = makeDate(year, month, dayData.day);
-                                }
-                                
-                                if(!channel.cheese02 && channel.channelTotal >= 1_000_000) {
-                                    channel.cheese02 = true;
-                                    channel.cheeseDate02 = makeDate(year, month, dayData.day);
-                                }
-                                
-                                if(!channel.cheese03 && channel.channelTotal >= 10_000_000) {
-                                    channel.cheese03 = true;
-                                    channel.cheeseDate03 = makeDate(year, month, dayData.day);
-                                }
-                                
-                                if(!channel.cheese04 && channel.channelTotal >= 100_000_000) {
-                                    channel.cheese04 = true;
-                                    channel.cheeseDate04 = makeDate(year, month, dayData.day);
+                                if(!channel.subscription1 && channel.channelTotal >= 1) {
+                                    channel.subscription1 = true;
+                                    channel.subscriptionDate1 = makeDate(year, month, dayData.day);
                                 }
 
-                                if(channel.onedayMaxCheese < dayData.dayTotal) {
-                                    channel.onedayMaxCheese = dayData.dayTotal;
-                                    channel.onedayMaxCheeseDate = makeDate(year, month, dayData.day);
+                                if(!channel.subscription10 && channel.channelTotal >= 10) {
+                                    channel.subscription10 = true;
+                                    channel.subscriptionDate10 = makeDate(year, month, dayData.day);
                                 }
-                            }
-                        }
-                    }
-                }
-            }
 
-            console.log(`${channel.channelName} : ${channel.channelCount}`);
-        }
-    }
+                                if(!channel.subscription50 && channel.channelTotal >= 50) {
+                                    channel.subscription50 = true;
+                                    channel.subscriptionDate50 = makeDate(year, month, dayData.day);
+                                }
+
+                                if(!channel.subscription100 && channel.channelTotal >= 100) {
+                                    channel.subscription100 = true;
+                                    channel.subscriptionDate100 = makeDate(year, month, dayData.day);
+                                }
+
+                                if(!channel.subscription250 && channel.channelTotal >= 250) {
+                                    channel.subscription250 = true;
+                                    channel.subscriptionDate250 = makeDate(year, month, dayData.day);
+                                }
+
+                                if(!channel.subscription500 && channel.channelTotal >= 500) {
+                                    channel.subscription500 = true;
+                                    channel.subscriptionDate500 = makeDate(year, month, dayData.day);
+                                }
+
+                                if(!channel.subscription1000 && channel.channelTotal >= 1000) {
+                                    channel.subscription1000 = true;
+                                    channel.subscriptionDate1000 = makeDate(year, month, dayData.day);
+                                }
+                            }   // for(let dayData of monthData.dayData)
+                        }   // if(monthData && monthData.dayData)
+                    }   // for(let month of monthArr)
+                }   // if(yearData)
+            }   // for(let year of yearArr)
+        }   // for(let channel of channels)
+    }   // if(channels[0] !== '')
 }
 
 function createNewChannelData(channelData) {
@@ -971,18 +1019,22 @@ function createNewChannelData(channelData) {
         channelName: channelData.channelName,
         channelImageUrl: channelData.channelImageUrl,
         channelTotal: 0,
-        channelCount: 0,
-        cheese01: false,
-        cheeseDate01: null,
-        cheese02: false,
-        cheeseDate02: null,
-        cheese03: false,
-        cheeseDate03: null,
-        cheese04: false,
-        cheeseDate04: null,
-        firstCheeseDate: null,
-        onedayMaxCheese: 0,
-        onedayMaxCheeseDate: null,
+        channelCount1: 0,
+        channelCount2: 0,
+        subscription1: false,
+        subscriptionDate1: null,
+        subscription10: false,
+        subscriptionDate10: null,
+        subscription50: false,
+        subscriptionDate50: null,
+        subscription100: false,
+        subscriptionDate100: null,
+        subscription250: false,
+        subscriptionDate250: null,
+        subscription500: false,
+        subscriptionDate500: null,
+        subscription1000: false,
+        subscriptionDate1000: null,
         yearData: []
     }
 }

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>치지직 스트리머 별 구독선물 내역</title>
+        <link rel="stylesheet" href="./css/ChzzkCheeseHistory.css">
+        <link rel="icon" type="image/png" href="./images/favicon.png">
+    </head>
+    <body>
+        <div id="root">
+            <header class="header_container">
+                <div id="header">
+                    <h3 class="m0 mt5 mb5 ml10 header_h3">치지직 스트리머 별 구독선물 내역</h3>
+                    <div class="form_button">
+                        <button class="button_container" onclick="document.getElementById('cheeseHistoryBtn').click();">치즈후원 내역</button>
+                        <a href="https://chzzk-cheese-history.pages.dev/" id="cheeseHistoryBtn"></a>
+                        <!-- 로컬환경 live server용 url -->
+                        <!-- <a href="http://127.0.0.1:5500/" id="cheeseHistoryBtn"></a> -->
+                    </div>
+                </div>
+            </header>
+            
+            <div id="discriptions">
+                <section>
+                    <div class="content">
+                        <div class="innerLayout">
+                            <div class="wrapper">
+                                <div id="guide">
+                                    <div class="form_wrapper">
+                                        <h2 class="form_title">
+                                            <em>구독선물 내역</em> 확인하기
+                                        </h2>
+                                        <ol class="guide_list">
+                                            <li class="guide_item">
+                                                <div class="guide_order">1</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">구독선물 내역을 확인하고 싶은 계정으로 네이버(치지직) 사이트에 로그인 하세요.</span>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <div class="guide_order">2</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">가져올 구독선물 내역의 데이터 개수를 입력합니다.</span>
+                                                    <div class="guide_info">10,000개</div>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <div class="guide_order">3</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">조회 버튼을 클릭하여 새 창으로 구독선물 내역 페이지를 열어줍니다.</span>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <div class="guide_order">4</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">구독선물 내역 페이지에서 컨트롤 + S를 눌러 구독선물 내역 JSON 파일을 저장합니다.</span>
+                                                    <div class="guide_info">저장 후 구독선물 내역 페이지는 닫아도 됩니다.</div>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <div class="guide_order">5</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">파일 선택 버튼을 클릭하여 저장한 파일을 등록합니다.</span>
+                                                    <div class="guide_info">JSON 파일은 한 번에 여러 개 등록 가능합니다.<br>로컬 스토리지 관리 버튼을 눌러 데이터를 저장할 수 있습니다.</div>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <div class="guide_order">6</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">생성된 스트리머 목록에서 확인하고 싶은 스트리머를 클릭합니다.</span>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <div class="guide_order">7</div>
+                                                <div class="guide_info_area">
+                                                    <span class="guide_text">생성된 구독선물 내역을 확인하세요.</span>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                
+                                <div id="comment">
+                                    <div class="form_wrapper">
+                                        <h2 class="form_title">COMMENT</h2>
+                                        <ul class="guide_list">
+                                            <li class="guide_item">PC 및 Window OS 환경에서 사용을 전제로 제작된 페이지입니다.</li>
+                                            <li class="guide_item">각 스트리머 별 구독선물 내역을 보기 쉽게 정리하기 위해 만든 페이지입니다.</li>
+                                            <li class="guide_item">해당 페이지는 치지직의 구독선물 내역을 그래프, 달력 형태로 볼 수 있도록 제작했습니다.</li>
+                                            <li class="guide_item">구독선물이 결제된 후 취소된 경우 완료 데이터와 취소 데이터가 함께 기록되기 때문에 취소된 횟수만큼 구독선물 횟수를 차감시켰습니다.</li>
+                                            <li class="guide_item">
+                                                <a href="https://game.naver.com/profile#cash" target="_blank" rel="noopener noreferrer"><img src="./images/NAVER_Game.JPG" style="height: 80px; border-radius: 20px;"></a>
+                                                <div class="guide_area">
+                                                    <h2 class="guide_text">네이버 게임 프로필</h2>
+                                                    <div class="guide_info">치즈 구독선물 내역의 상세 정보를 확인하고 싶으신 분은<br>왼쪽 이미지를 클릭하셔서 네이버 게임 프로필 페이지로 이동하시기 바랍니다.</div>
+                                                </div>
+                                            </li>
+                                            <li class="guide_item">
+                                                <a href="https://github.com/alsrbxo0428/ChzzkCheeseHistory" target="_blank" rel="noopener noreferrer"><img src="./images/github_icon.png" style="height: 80px; border-radius: 20px;"></a>
+                                                <div class="guide_area">
+                                                    <h2 class="guide_text">ChzzkCheeseHistory</h2>
+                                                    <div class="guide_info">해당 페이지의 소스 코드를 확인하고 싶으신 분은<br>왼쪽 이미지를 클릭하셔서 깃허브의 ChzzkCheeseHistory Repository 페이지로 이동하시기 바랍니다.</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+    
+            <div id="history">
+                <section>
+                    <div class="content">
+                        <div class="innerLayout">
+                            <div class="history">
+                                <ul class="history_ul">
+                                    <li class="history_li">
+                                        <header class="form_header">
+                                            <div class="form_header_inner">
+                                                <h2 class="form_title">구독선물 내역 조회</h2>
+                                                <div class="form_box_header">
+                                                    <div class="form_box_button">
+                                                        <div class="search_wrap">
+                                                            <div class="search_wrapper">
+                                                                <div class="search_box">
+                                                                    <input type="text" id="size" value="10000" maxlength="5" onchange="chgUrl();" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form_button">
+                                                            <button class="button_container" onclick="openHistory();">조회</button>
+                                                            <a href="https://api.chzzk.naver.com/commercial/v1/gift/subscription/send-history?page=0&size=10000" id="apiLink" target="_blank" rel="noopener noreferrer"></a>
+                                                        </div>
+                                                        
+                                                        <div class="form_button">
+                                                            <ul class="form_button_ul">
+                                                                <li>
+                                                                    <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                                                    <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple data-visible="none" />
+                                                                </li>
+                                                                <li>
+                                                                    <p id="fileList"></p>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="localStorage_container">
+                                                <button class="button_container button_container_light" onclick="openManageLocalStorage();">로컬 스토리지 관리</button>
+                                            </div>
+                                        </header>
+                                    </li>
+                                    <li class="history_li">
+                                        <div class="form_wrapper">
+                                            <ul id="output">
+                                                <div id="totalContainer">
+                                                    <h3 id="totalPayAmount">구독선물 횟수 : 0회(All) / 0회(1T) / 0회(2T)</h3>
+                                                    <div class="radio-box" onchange="changeSortType();">
+                                                        <input type="radio" id="sortTotal" name="sortType" value="total" checked="checked"><label for="sortTotal">구독선물 횟수순</label>
+                                                        <input type="radio" id="sortName" name="sortType" value="name"><label for="sortName">닉네임순</label>
+                                                    </div>
+                                                </div>
+                                                <div id="channelListContainer" data-visible="none"></div>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="history_li">
+                                        <div class="form_wrapper" id="channelHistoryWrap" data-visible="none">
+                                            <div class="tab_container">
+                                                <ul class="tab_list">
+                                                    <li class="tab_item">
+                                                        <button class="tab_button on" id="graphBtn" onclick="chgView('Graph');">
+                                                            <span class="tab_box">
+                                                                <span class="tab_text">그래프</span>
+                                                            </span>
+                                                        </button>
+                                                    </li>
+                                                    <li class="tab_item">
+                                                        <button class="tab_button" id="calendarBtn" onclick="chgView('Calendar');">
+                                                            <span class="tab_box">
+                                                                <span class="tab_text">달력</span>
+                                                            </span>
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                                <div class="selectbox" data-visible="none">
+                                                    <div class="selectbox_container">
+                                                        <button class="selectbox_component" data-key="calendar_year">
+                                                            <span class="selectbox_inner"></span>
+                                                        </button>
+                                                        <ul class="selectbox_layer calendar_year_selectbox" data-visible="none"></ul>
+                                                    </div>
+                                                    <div class="selectbox_container">
+                                                        <button class="selectbox_component" data-key="calendar_month">
+                                                            <span class="selectbox_inner"></span>
+                                                        </button>
+                                                        <ul class="selectbox_layer calendar_month_selectbox" data-visible="none"></ul>
+                                                    </div>
+                                                    <button type="button" id="button" class="button_container" onclick="rendarCalendar();" style="margin-left: 0px;">
+                                                        <span class="button_inner">조회</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="channelHistory" data-visible="block">
+                                                <h3 id="channelInfo"></h3>
+                                                <ul id="channelInfoYear"></ul>
+                                                <canvas id="monthlyChart" height="100px"></canvas>
+                                            </div>
+                                            <div id="channelHistoryCalendar" data-visible="none">
+                                                <ul id="channelHistoryCalendarUl">
+                                                    <li id="channelHistoryCalendarheaderLi">
+                                                        <div class="calendar_month_total"></div>
+                                                        <div class="calendar_header">
+                                                            <button class="button_container_fit" onclick="goPrev();"><h2><</h2></button>
+                                                            <h2 class="calendarDate">0000년 0월</h2>
+                                                            <button class="button_container_fit" onclick="goNext();"><h2>></h2></button>
+                                                        </div>
+                                                        <div class="subscription_history"></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="calendar_container">
+                                                            <table class="calendar">
+                                                                <thead class="days">
+                                                                    <tr>
+                                                                        <th class="day"><h4>SUN</h4></th>
+                                                                        <th class="day"><h4>MON</h4></th>
+                                                                        <th class="day"><h4>TUE</h4></th>
+                                                                        <th class="day"><h4>WED</h4></th>
+                                                                        <th class="day"><h4>THU</h4></th>
+                                                                        <th class="day"><h4>FRI</h4></th>
+                                                                        <th class="day"><h4>SAT</h4></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody class="dates"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="popup_dimmed" data-visible="none">
+            <div class="popup_container">
+                <h2 class="popup_title">로컬 스토리지 관리</h2>
+                <div class="popup_content">
+                    <div class="popup_inner">
+                        <div class="content">
+                            <div class="innerLayout">
+                                <div class="wrapper" style="text-align: initial;">
+                                    <div id="comment" style="padding: 0; margin: 0 10px 10px 0;">
+                                        <div class="form_wrapper">
+                                            <h3 class="form_title">
+                                                <em>로컬 스토리지</em> 관리
+                                            </h3>
+                                            <ul class="guide_list">
+                                                <li class="guide_item">
+                                                    <div class="guide_order">1</div>
+                                                    <div class="guide_info_area">
+                                                        <span class="guide_text">구독선물 내역에서 저장하고 싶은 데이터를 선택합니다.</span>
+                                                    </div>
+                                                </li>
+                                                <li class="guide_item">
+                                                    <div class="guide_order">2</div>
+                                                    <div class="guide_info_area">
+                                                        <span class="guide_text">데이터 저장 버튼을 클릭하면 선택된 데이터가 로컬 스토리지로 저장됩니다.</span>
+                                                        <div class="guide_info">스트리머가 중복될 경우 새로 저장하는 데이터로 덮어쓰기 됩니다.</div>
+                                                    </div>
+                                                </li>
+                                                <li class="guide_item">
+                                                    <div class="guide_order">3</div>
+                                                    <div class="guide_info_area">
+                                                        <span class="guide_text">적용하고 싶은 로컬 스토리지 데이터를 선택합니다.</span>
+                                                    </div>
+                                                </li>
+                                                <li class="guide_item">
+                                                    <div class="guide_order">4</div>
+                                                    <div class="guide_info_area">
+                                                        <span class="guide_text">적용하기 버튼을 클릭하면 스트리머 목록 및 구독선물 내역에 반영됩니다.</span>
+                                                        <div class="guide_info">중복되는 스트리머/연도 데이터는 로컬 스토리지의 데이터로 덮어쓰기 됩니다.</div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+    
+                                    <div id="comment" style="padding: 0; margin: 0 0 10px 10px;">
+                                        <div class="form_wrapper">
+                                            <h3 class="form_title">
+                                                Comment
+                                            </h3>
+                                            <ul class="guide_list">
+                                                <li class="guide_item">로컬 스토리지는 PC에 저장되며, 삭제하지 않는 한 데이터가 유지됩니다.</li>
+                                                <li class="guide_item">해당 페이지의 개발자는 사용자의 정보를 수집하지 않습니다.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="wrapper">
+                                    <div id="guide" style="padding: 0; margin: 10px 10px 0 0;">
+                                        <div class="form_wrapper">
+                                            <div class="form_title_btn">
+                                                <h3 class="form_title" style="text-align: initial;">파일 데이터</h3>
+                                                <div>
+                                                    <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                                    <button class="button_container" onclick="saveLocalStorage();">데이터 저장</button>
+                                                </div>
+                                            </div>
+                                            <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
+                                                <colgroup>
+                                                    <col>
+                                                    <col width="50%">
+                                                    <col width="30%">
+                                                    <col>
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>번호</th>
+                                                        <th>스트리머</th>
+                                                        <th>연도</th>
+                                                        <th>
+                                                            <div class="check-box">
+                                                                <label for="file_allCheck">
+                                                                    <input type="checkbox" id="file_allCheck" onchange="allCheck(this.id);" checked />
+                                                                    <div class="chkbox">
+                                                                        <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
+                                                                            <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                                            <polyline points="4 11 8 15 16 6"></polyline>
+                                                                        </svg>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="subscriptionHistList">
+                                                    <tr>
+                                                        <td colspan="4">
+                                                            <p>등록된 파일이 없습니다.</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+    
+                                    <div id="guide" style="padding: 0; margin: 10px 0 0 10px;">
+                                        <div class="form_wrapper">
+                                            <div class="form_title_btn">
+                                                <h3 class="form_title" style="text-align: initial;">로컬 스토리지</h3>
+                                                <div>
+                                                    <button class="button_container button_container_red" onclick="deleteCheckedLocalStorage();">선택삭제</button>
+                                                    <button class="button_container" onclick="applyLocalStorage();">가져오기</button>
+                                                </div>
+                                            </div>
+                                            <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
+                                                <colgroup>
+                                                    <col>
+                                                    <col width="50%">
+                                                    <col width="30%">
+                                                    <col>
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>번호</th>
+                                                        <th>스트리머</th>
+                                                        <th>연도</th>
+                                                        <th>
+                                                            <div class="check-box">
+                                                                <label for="localStorage_allCheck">
+                                                                    <input type="checkbox" id="localStorage_allCheck" onchange="allCheck(this.id);" checked />
+                                                                    <div class="chkbox">
+                                                                        <svg width="20px" height="20px" viewBox="0 0 20 20" class="chk-svg">
+                                                                            <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                                            <polyline points="4 11 8 15 16 6"></polyline>
+                                                                        </svg>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="subscriptionHistLocalStorageList">
+                                                    <tr>
+                                                        <td colspan="4">
+                                                            <p>저장된 데이터가 없습니다.</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="popup_button" onclick="closeManageLocalStorage();">
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="popup_icon_close__BfB2v">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.79289 7.79289C8.18342 7.40237 8.81658 7.40237 9.20711 7.79289L22.2071 20.7929C22.5976 21.1834 22.5976 21.8166 22.2071 22.2071C21.8166 22.5976 21.1834 22.5976 20.7929 22.2071L7.79289 9.20711C7.40237 8.81658 7.40237 8.18342 7.79289 7.79289Z" fill="#2E3033"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M7.79289 22.2071C7.40237 21.8166 7.40237 21.1834 7.79289 20.7929L20.7929 7.79289C21.1834 7.40237 21.8166 7.40237 22.2071 7.79289C22.5976 8.18342 22.5976 8.81658 22.2071 9.20711L9.20711 22.2071C8.81658 22.5976 8.18342 22.5976 7.79289 22.2071Z" fill="#2E3033"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- chart cdn -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js">
+            import { Colors } from "chart.js";
+
+            document.addEventListener("DOMContentLoaded", function() {
+                Chart.register(Colors);
+            });
+        </script>
+        <script defer src="./js/subscription.js"></script>
+    </body>
+</html>

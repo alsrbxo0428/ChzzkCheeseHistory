@@ -1,11 +1,15 @@
 @charset "utf-8";
 
-[data-visible="true"] {
-    display: block;
+[data-visible="block"] {
+    display: block !important;
 }
 
-[data-visible="false"] {
-    display: none;
+[data-visible="flex"] {
+    display: flex !important;
+}
+
+[data-visible="none"] {
+    display: none !important;
 }
 
 /* tag */
@@ -93,6 +97,7 @@ table {
 #header {
     display: flex;
     width: 100%;
+    justify-content: space-between;
 }
 
 #history {
@@ -116,6 +121,7 @@ table {
 
 #totalContainer {
     display: flex;
+    justify-content: space-between;
 }
 
 #totalContainer #sortUl {
@@ -139,7 +145,6 @@ table {
 
 #channelListContainer {
     margin-top: 10px;
-    display: none;
 }
 
 #channelList button {
@@ -215,6 +220,16 @@ table {
     display: flex;
     gap: 13px;
     align-items: center;
+}
+
+#channelHistoryCalendar .subscription_history ul {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+}
+
+.header_h3 {
+    align-content: center;
 }
 
 .content {
@@ -343,7 +358,6 @@ table {
     display: inline-block;
     position: relative;
     vertical-align: top;
-    width: 130px;
 }
 
 .selectbox_component {
@@ -642,6 +656,10 @@ table {
     vertical-align: middle;
 }
 
+.dates .date .date_inner ul li:last-child {
+    margin-bottom: 20px;
+}
+
 .other {
     color:rgba(0, 0, 0, .4);
 }
@@ -661,13 +679,19 @@ table {
 .calendar_month_total {
     display: flex;
     justify-content: start;
-    width: 400px;
+    width: 600px;
 }
 
 .cheese_history {
     display: flex;
     justify-content: end;
-    width: 400px;
+    width: 600px;
+}
+
+.subscription_history {
+    display: flex;
+    justify-content: end;
+    width: 600px;
 }
 
 .cheese_history_button {
@@ -848,3 +872,15 @@ table {
 .radio-box input[type="radio"]::after {content: ''; width: 10px; height: 10px; display: flex; align-items: center; justify-self: center; background: var(--radio); border-radius: 50%; position: absolute; transition: transform .5s cubic-bezier(0.48,1.97,0.5,0.63); transform: translateX(200%); z-index: 1;}
 .radio-box input[type="radio"]:checked::after {transform: translateX(0%);}
 .radio-box input[type="radio"]:checked ~ input[type="radio"]::after { transform: translateX(-200%);}
+
+
+
+
+
+
+
+
+
+.history-type {
+    margin-left: 10px;
+}
