@@ -172,7 +172,7 @@ async function readFile(event) {
 
             let historyStatus = subscriptionData.historyStatus;
             let tier = subscriptionData.tier;
-            let quantity = subscriptionData.quantity;
+            let quantity = subscriptionData.historyQuantity;
 
             let channelData = channels.find(channel => channel.channelId === subscriptionData.channelId);
             if(!channelData) {
