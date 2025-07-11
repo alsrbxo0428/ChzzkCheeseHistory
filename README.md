@@ -9,6 +9,10 @@
 
 ## 업데이트 내역
 
+### 2025.07.12
+- 구독선물 내역 총합 계산에 사용되는 데이터 수정
+    - quantity -> historyQuantity
+
 ### 2025.03.28
 - 구독선물 내역 확인 페이지 추가
 - inline style display로 관리하던 요소들을 data-visible 속성으로 변경
