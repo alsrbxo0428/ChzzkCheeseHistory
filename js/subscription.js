@@ -149,6 +149,43 @@ function goToday() {
     chgCalendarDate(year, month, null);
 }
 
+function openDirectInput() {
+    document.body.style.cssText = "overflow: hidden; position: fixed; top: 0; width: 100%; height: 100%;";
+    document.querySelector(".direct_input").dataset.visible = "flex";
+    document.getElementById("directInputString").focus();
+}
+
+function closeDirectInput() {
+    document.body.removeAttribute("style");
+    document.querySelector(".direct_input").dataset.visible = "none";
+}
+
+function registDirectInput() {
+    channels = [];
+    document.getElementById("fileList").innerText = ``;
+    document.getElementById("channelHistoryWrap").dataset.visible = "none";
+
+    let subscriptionDataArr = null;
+    let directInputString = document.getElementById("directInputString").value;
+
+    try {
+        const data = JSON.parse(directInputString);
+        if(data.code == 200) subscriptionDataArr = data.content.data;
+        else alert(data.message);
+    } catch (error) {
+        alert('변환 오류 발생');
+        return;
+    }
+
+    convertSubscriptionDataArrToChannelData(subscriptionDataArr);
+
+    initializationHtml();
+    makeFileDataList();
+    
+    document.getElementById("directInputString").value = '';
+    closeDirectInput();
+}
+
 async function readFile(event) {
     const files = event.target.files;
     const subscriptionDataArr = await processFiles(files);
@@ -157,6 +194,39 @@ async function readFile(event) {
     document.getElementById("fileList").innerText = `등록된 파일: ${files.length}건`;
     document.getElementById("channelHistoryWrap").dataset.visible = "none";
 
+    convertSubscriptionDataArrToChannelData(subscriptionDataArr);
+
+    initializationHtml();
+    makeFileDataList();
+}
+
+async function processFiles(files) {
+    const fileReadPromises = Array.from(files).map(file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if(data.code == 200) resolve(data.content.data);
+                else reject(data.message);
+            } catch (error) {
+                reject(`파일 변환 오류: ${error.message}`);
+            }
+        };
+
+        reader.onerror = () => reject("파일 읽기 실패");
+        reader.readAsText(file);
+    }));
+
+    try {
+        return (await Promise.all(fileReadPromises)).flat();
+    } catch (error) {
+        console.error("오류 발생:", error);
+        return [];
+    }
+}
+
+function convertSubscriptionDataArrToChannelData(subscriptionDataArr) {
     if(subscriptionDataArr) {
         subscriptionDataArr.sort((a, b) => {
             if(a.historyDate < b.historyDate) return -1;
@@ -259,35 +329,6 @@ async function readFile(event) {
                 }
             }
         }
-    }
-
-    initializationHtml();
-    makeFileDataList();
-}
-
-async function processFiles(files) {
-    const fileReadPromises = Array.from(files).map(file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.code == 200) resolve(data.content.data);
-                else reject(`${data.message}`);
-            } catch (error) {
-                reject(`파일 변환 오류: ${error.message}`);
-            }
-        };
-
-        reader.onerror = () => reject("파일 읽기 실패");
-        reader.readAsText(file);
-    }));
-
-    try {
-        return (await Promise.all(fileReadPromises)).flat();
-    } catch (error) {
-        console.error("오류 발생:", error);
-        return [];
     }
 }
 
@@ -632,13 +673,13 @@ function makeDate(year, month, date) {
 
 function openManageLocalStorage() {
     document.body.style.cssText = "overflow: hidden; position: fixed; top: 0; width: 100%; height: 100%;";
-    document.querySelector(".popup_dimmed").dataset.visible = "flex";
+    document.querySelector(".local_storage").dataset.visible = "flex";
     loadLocalStorageDataList();
 }
 
 function closeManageLocalStorage() {
     document.body.removeAttribute("style");
-    document.querySelector(".popup_dimmed").dataset.visible = "none";
+    document.querySelector(".local_storage").dataset.visible = "none";
 }
 
 function loadLocalStorageDataList() {

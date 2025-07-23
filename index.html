@@ -33,7 +33,7 @@
                                             <li class="guide_item">
                                                 <div class="guide_order">1</div>
                                                 <div class="guide_info_area">
-                                                    <span class="guide_text">후원 내역을 확인하고 싶은 계정으로 네이버(치지직) 사이트에 로그인 하세요.</span>
+                                                    <span class="guide_text">후원 내역을 확인하고 싶은 계정으로 네이버(치지직) 사이트에서 로그인 하세요.</span>
                                                 </div>
                                             </li>
                                             <li class="guide_item">
@@ -52,15 +52,15 @@
                                             <li class="guide_item">
                                                 <div class="guide_order">4</div>
                                                 <div class="guide_info_area">
-                                                    <span class="guide_text">후원 내역 페이지에서 컨트롤 + S를 눌러 후원 내역 JSON 파일을 저장합니다.</span>
-                                                    <div class="guide_info">저장 후 후원 내역 페이지는 닫아도 됩니다.</div>
+                                                    <span class="guide_text">후원 내역 페이지에서 페이지에서 내역 데이터를 전체선택(컨트롤 + A) 후 복사(컨트롤 + C)합니다.</span>
+                                                    <div class="guide_info">후원 내역 페이지에서 컨트롤 + S를 눌러 JSON 파일을 다운로드 받으셔도 됩니다.<br>복사/저장 후 구독선물 내역 페이지는 닫으셔도 됩니다.</div>
                                                 </div>
                                             </li>
                                             <li class="guide_item">
                                                 <div class="guide_order">5</div>
                                                 <div class="guide_info_area">
-                                                    <span class="guide_text">파일 선택 버튼을 클릭하여 저장한 파일을 등록합니다.</span>
-                                                    <div class="guide_info">JSON 파일은 한 번에 여러 개 등록 가능합니다.<br>로컬 스토리지 관리 버튼을 눌러 데이터를 저장할 수 있습니다.</div>
+                                                    <span class="guide_text">직접입력 버튼을 클릭하여 입력창을 열어 복사한 데이터를 붙여넣고(컨트롤 + V) 입력완료 버튼을 클릭합니다.</span>
+                                                    <div class="guide_info">JSON 파일을 다운로드 받은 경우 파일등록 버튼을 클릭합니다. JSON 파일은 한 번에 여러 개 등록 가능합니다.<br>로컬 스토리지 관리 버튼을 눌러 데이터를 저장할 수 있습니다.</div>
                                                 </div>
                                             </li>
                                             <li class="guide_item">
@@ -83,7 +83,7 @@
                                     <div class="form_wrapper">
                                         <h2 class="form_title">COMMENT</h2>
                                         <ul class="guide_list">
-                                            <li class="guide_item">PC 및 Window OS 환경에서 사용을 전제로 제작된 페이지입니다.</li>
+                                            <li class="guide_item">PC, Window OS 환경에서의 사용을 전제로 제작된 페이지입니다.</li>
                                             <li class="guide_item">각 스트리머 별 치즈 후원 내역을 보기 쉽게 정리하기 위해 만든 페이지입니다.</li>
                                             <li class="guide_item">해당 페이지는 치지직의 치즈 후원 내역을 그래프, 달력 형태로 볼 수 있도록 제작했습니다.</li>
                                             <li class="guide_item">유료 보이스(TTS) 비용은 뱃지 달성 조건에 포함되지않아 후원내역에서 집계하지 않습니다.</li>
@@ -145,7 +145,10 @@
                                                         <div class="form_button">
                                                             <ul class="form_button_ul">
                                                                 <li>
-                                                                    <button class="button_container button_container_light" onclick="addFile();">파일등록</button>
+                                                                    <button class="button_container button_container_light" onclick="openDirectInput();">직접입력</button>
+                                                                </li>
+                                                                <li>
+                                                                    <button class="button_container button_container_light ml0" onclick="addFile();">파일등록</button>
                                                                     <input type="file" id="jsonFileInput" accept="application/json" onchange="readFile(event);" multiple data-visible="none" />
                                                                 </li>
                                                                 <li>
@@ -258,7 +261,45 @@
             </div>
         </div>
 
-        <div class="popup_dimmed" data-visible="none">
+        <div class="popup_dimmed direct_input" data-visible="none">
+            <div class="popup_container">
+                <h2 class="popup_title">후원 내역 직접 입력</h2>
+                <div class="popup_content">
+                    <div class="popup_inner">
+                        <div class="content">
+                            <div class="innerLayout">
+                                <div class="wrapper">
+                                    <div id="guide" style="padding: 0;">
+                                        <div class="form_wrapper">
+                                            <div class="form_title_btn">
+                                                <h3 class="form_title" style="text-align: initial;">후원내역 직접입력</h3>
+                                                <div>
+                                                    <button class="button_container" onclick="registDirectInput();">입력완료</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="search_wrap" style="height: 400px; margin: 10px 0 0 0;">
+                                                <div class="search_wrapper" style="height: 100%;">
+                                                    <textarea id="directInputString" style="width: 99%; height: 95%; resize: none; overflow: auto;"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="popup_button" onclick="closeDirectInput();">
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="popup_icon_close__BfB2v">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.79289 7.79289C8.18342 7.40237 8.81658 7.40237 9.20711 7.79289L22.2071 20.7929C22.5976 21.1834 22.5976 21.8166 22.2071 22.2071C21.8166 22.5976 21.1834 22.5976 20.7929 22.2071L7.79289 9.20711C7.40237 8.81658 7.40237 8.18342 7.79289 7.79289Z" fill="#2E3033"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M7.79289 22.2071C7.40237 21.8166 7.40237 21.1834 7.79289 20.7929L20.7929 7.79289C21.1834 7.40237 21.8166 7.40237 22.2071 7.79289C22.5976 8.18342 22.5976 8.81658 22.2071 9.20711L9.20711 22.2071C8.81658 22.5976 8.18342 22.5976 7.79289 22.2071Z" fill="#2E3033"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="popup_dimmed local_storage" data-visible="none">
             <div class="popup_container">
                 <h2 class="popup_title">로컬 스토리지 관리</h2>
                 <div class="popup_content">

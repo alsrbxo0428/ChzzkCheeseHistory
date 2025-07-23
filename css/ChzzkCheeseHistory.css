@@ -435,14 +435,14 @@ table {
 }
 
 .search_wrapper {
-    width: 250px;
     align-items: center;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
     display: flex;
-    padding: 9px 5px 9px 14px;
+    padding: 3px 5px 9px 14px;
     width: 100%;
+    height: 40px;
 }
 
 .search_wrapper.search_is_focused {
@@ -837,6 +837,14 @@ table {
     align-items: center;
 }
 
+.history-type {
+    margin-left: 10px;
+}
+
+.ml0 {
+    margin-left: 0px;
+}
+
 /* 체크박스 커스텀 */
 .check-box {position: relative;}
 .check-box input[type="checkbox"] {position: absolute; width: 0; height: 0; opacity: 0; z-index: -1;}
@@ -880,7 +888,3 @@ table {
 
 
 
-
-.history-type {
-    margin-left: 10px;
-}
