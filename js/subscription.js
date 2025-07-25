@@ -899,6 +899,7 @@ function deleteCheckedLocalStorage() {
 
 function applyLocalStorage() {
     let checkedList = document.querySelectorAll("input[name='localStorage_subscriptionHistList']:checked");
+    document.getElementById("channelHistoryWrap").dataset.visible = "none";
     
     if(checkedList.length > 0) {
         let checkedDatas = [];
