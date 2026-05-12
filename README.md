@@ -8,7 +8,11 @@
 - `Chart.js`
 
 ## 확장 프로그램
-링크: https://github.com/alsrbxo0428/ChzzkCheeseHistory/releases/tag/Chzzk_Cheese_History
+- 첨부파일 및 설명
+    - https://github.com/alsrbxo0428/ChzzkCheeseHistory/releases/tag/Chzzk_Cheese_History
+
+- [endlifeform] 님 제작
+    - https://github.com/endlifeform/ChzzkCheeseHistory
 
 ## 업데이트 내역
 
