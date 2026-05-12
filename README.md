@@ -13,7 +13,8 @@
 - chart.js 라이브러리 참조 방식 변경
     - cdn -> libs/chart.umd.js (로컬소스참조)
 - 치즈 후원 내역 조회 확장 프로그램 추가
-    - 크롬 및 웨일 확장앱관리자 -> 개발자모드 전환 -> 압축해제 된 확장앱 설치 -> ChzzkCheeseHistory_Extension.zip 압축해제 및 해당 폴더 선택
+    - 크롬 및 웨일 확장앱관리자 -> 개발자모드 전환 -> 압축해제 된 확장앱 설치\
+    -> ChzzkCheeseHistory_Extension.zip 압축해제 및 해당 폴더 선택
 - monthArr, yearArr 초기화 코드 변경
 
 ### 2026.01.04
