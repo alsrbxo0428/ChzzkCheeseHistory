@@ -7,6 +7,9 @@
 오픈소스 라이브러리
 - `Chart.js`
 
+## 확장 프로그램
+링크: https://github.com/alsrbxo0428/ChzzkCheeseHistory/releases/tag/Chzzk_Cheese_History
+
 ## 업데이트 내역
 
 ### 2026.05.12
