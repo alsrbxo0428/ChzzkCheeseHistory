@@ -111,6 +111,7 @@ table {
     margin: 0 auto;
     padding: 0 35px 30px;
     width: 100%;
+    min-height: 300px;
 }
 
 #root {
@@ -864,7 +865,6 @@ table {
 .check-box input[type="checkbox"]:checked ~ .chkbox path {fill: #4e41db;}
 .check-box .chk-svg polyline {stroke: #fff;}
 
-
 /* 라디오버튼 */
 /* 공통 */
 .radio-box {--radio: #4e41db; display: flex; align-items: center;}
@@ -880,11 +880,3 @@ table {
 .radio-box input[type="radio"]::after {content: ''; width: 10px; height: 10px; display: flex; align-items: center; justify-self: center; background: var(--radio); border-radius: 50%; position: absolute; transition: transform .5s cubic-bezier(0.48,1.97,0.5,0.63); transform: translateX(200%); z-index: 1;}
 .radio-box input[type="radio"]:checked::after {transform: translateX(0%);}
 .radio-box input[type="radio"]:checked ~ input[type="radio"]::after { transform: translateX(-200%);}
-
-
-
-
-
-
-
-

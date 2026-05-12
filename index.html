@@ -11,7 +11,7 @@
         <div id="root">
             <header class="header_container">
                 <div id="header">
-                    <h3 class="m0 mt5 mb5 ml10 header_h3">치지직 스트리머 별 후원 내역</h3>
+                    <h3 class="header_h3">치지직 스트리머 별 후원 내역</h3>
                     <div class="form_button">
                         <button class="button_container" onclick="document.getElementById('subscriptionHistoryBtn').click();">구독선물 내역</button>
                         <a href="./subscription.html" id="subscriptionHistoryBtn"></a>
@@ -166,16 +166,14 @@
                                     </li>
                                     <li class="history_li">
                                         <div class="form_wrapper">
-                                            <ul id="output">
-                                                <div id="totalContainer">
-                                                    <h3 id="totalPayAmount">전체 후원 금액 : 0원</h3>
-                                                    <div class="radio-box" onchange="changeSortType();">
-                                                        <input type="radio" id="sortTotal" name="sortType" value="total" checked="checked"><label for="sortTotal">후원금액순</label>
-                                                        <input type="radio" id="sortName" name="sortType" value="name"><label for="sortName">닉네임순</label>
-                                                    </div>
+                                            <div id="totalContainer">
+                                                <h3 id="totalPayAmount">전체 후원 금액 : 0원</h3>
+                                                <div class="radio-box" onchange="changeSortType();">
+                                                    <input type="radio" id="sortTotal" name="sortType" value="total" checked="checked"><label for="sortTotal">후원금액순</label>
+                                                    <input type="radio" id="sortName" name="sortType" value="name"><label for="sortName">닉네임순</label>
                                                 </div>
-                                                <div id="channelListContainer" data-visible="none"></div>
-                                            </ul>
+                                            </div>
+                                            <div id="channelListContainer" data-visible="none"></div>
                                         </div>
                                     </li>
                                     <li class="history_li">
@@ -415,10 +413,10 @@
                                             </div>
                                             <table class="table_container" width="100%" cellpadding="0" cellspacing="0">
                                                 <colgroup>
-                                                    <col>
+                                                    <col wdith="auto">
                                                     <col width="50%">
                                                     <col width="30%">
-                                                    <col>
+                                                    <col wdith="auto">
                                                 </colgroup>
                                                 <thead>
                                                     <tr>
@@ -464,14 +462,7 @@
             </div>
         </div>
         
-        <!-- chart cdn -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js">
-            import { Colors } from "chart.js";
-
-            document.addEventListener("DOMContentLoaded", function() {
-                Chart.register(Colors);
-            });
-        </script>
+        <script src="./libs/chart.umd.js"></script>
         <script defer src="./js/ChzzkCheeseHistory.js"></script>
     </body>
 </html>
