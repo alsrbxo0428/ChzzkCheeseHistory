@@ -5,8 +5,8 @@ let year = date.getFullYear();
 let month = date.getMonth() + 1;
 let calendarDate = `${year}-${month}`;
 
-const monthArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-const yearArr = [2024, 2025, 2026];
+const monthArr = Array.from({length: 12}, (_, i) => i + 1);
+const yearArr = Array.from({length: new Date().getFullYear() - 2023 + 1}, (_, i) => 2023 + i);
 const selectboxState = {};
 
 document.addEventListener("DOMContentLoaded", function() {
