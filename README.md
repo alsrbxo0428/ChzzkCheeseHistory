@@ -7,9 +7,9 @@
 오픈소스 라이브러리
 - `Chart.js`
 
-## 확장 프로그램
-- 첨부파일 및 설명
-    - https://github.com/alsrbxo0428/ChzzkCheeseHistory/releases/tag/Chzzk_Cheese_History
+## 확장 프로그램  
+- Chrome 웹 스토어
+    - [Chzzk Cheese History](https://chromewebstore.google.com/detail/chzzk-cheese-history/gcojgdbmkogicdbkcofejogigdlfgkob)
 
 - [endlifeform] 님 제작
     - https://github.com/endlifeform/ChzzkCheeseHistory
