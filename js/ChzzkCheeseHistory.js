@@ -563,7 +563,7 @@ function rendarCalendar(focusDay) {
         if(monthData) {
             monthTotalHtml = `<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)`;
             if(monthData.monthTtsCount > 0) {
-                monthTotalHtml += ` [TTS : ${Number(monthData.monthTtsTotal).toLocaleString("ko-KR")}원 (${monthData.monthTtsCount}회)]`;
+                monthTotalHtml += `<br>TTS : ${Number(monthData.monthTtsTotal).toLocaleString("ko-KR")}원 (${monthData.monthTtsCount}회)`;
             }
             monthTotalHtml += `</h3>`;
         }
