@@ -246,8 +246,6 @@ function convertCheeseDataArrToChannelData(cheeseDataArr) {
         });
 
         for(let cheeseData of cheeseDataArr) {
-            if(cheeseData.donationType === "TTS") continue;
-
             let splitedPurchaseDate = cheeseData.purchaseDate.split(' ')[0].split('-');
             let purchaseYear = Number(splitedPurchaseDate[0]);
             let purchaseMonth = Number(splitedPurchaseDate[1]);
@@ -266,13 +264,20 @@ function convertCheeseDataArrToChannelData(cheeseDataArr) {
                     year: purchaseYear,
                     yearTotal: 0,
                     yearCount: 0,
+                    yearTtsTotal: 0,
+                    yearTtsCount: 0,
                     monthData: []
                 }
                 channelData.yearData.push(yearData);
             }
 
-            yearData.yearTotal += payAmount;
-            yearData.yearCount++;
+            if(cheeseData.donationType === "TTS") {
+                yearData.yearTtsTotal += payAmount;
+                yearData.yearTtsCount++;
+            } else {
+                yearData.yearTotal += payAmount;
+                yearData.yearCount++;
+            }
             
             let monthData = yearData.monthData.find(data => data.month === purchaseMonth);
             if(!monthData) {
@@ -280,26 +285,40 @@ function convertCheeseDataArrToChannelData(cheeseDataArr) {
                     month: purchaseMonth,
                     monthTotal: 0,
                     monthCount: 0,
+                    monthTtsTotal: 0,
+                    monthTtsCount: 0,
                     dayData: []
                 }
                 yearData.monthData.push(monthData);
             }
 
-            monthData.monthTotal += payAmount;
-            monthData.monthCount++;
+            if(cheeseData.donationType === "TTS") {
+                monthData.monthTtsTotal += payAmount;
+                monthData.monthTtsCount++;
+            } else {
+                monthData.monthTotal += payAmount;
+                monthData.monthCount++;
+            }
 
             let dayData = monthData.dayData.find(data => data.day === purchaseDay);
             if(!dayData) {
                 dayData = {
                     day: purchaseDay,
                     dayTotal: 0,
-                    dayCount: 0
+                    dayCount: 0,
+                    dayTtsTotal: 0,
+                    dayTtsCount: 0
                 }
                 monthData.dayData.push(dayData);
             }
 
-            dayData.dayTotal += payAmount;
-            dayData.dayCount++;
+            if(cheeseData.donationType === "TTS") {
+                dayData.dayTtsTotal += payAmount;
+                dayData.dayTtsCount++;
+            } else {
+                dayData.dayTotal += payAmount;
+                dayData.dayCount++;
+            }
         }
     }
 }
@@ -312,13 +331,20 @@ function initializationHtml() {
     rebuildChannels();
 
     let totalPayAmount = 0;
+    let totalTtsPayAmount = 0;
     for(let channel of channels) {
         totalPayAmount += channel.channelTotal;
+        totalTtsPayAmount += channel.channelTtsTotal;
     }
 
     document.getElementById("channelInfo").innerText = '';
     document.getElementById("channelInfoYear").innerText = '';
-    document.getElementById("totalPayAmount").innerText = `전체 후원 금액 : ${totalPayAmount.toLocaleString("ko-KR")}원`;
+
+    let totalPayAmountHtml = `전체 후원 금액 : ${totalPayAmount.toLocaleString("ko-KR")}원`;
+    if(totalTtsPayAmount > 0) {
+         totalPayAmountHtml += ` [TTS : ${totalTtsPayAmount.toLocaleString("ko-KR")}원]`;
+    }
+    document.getElementById("totalPayAmount").innerText = totalPayAmountHtml;
     document.getElementById("channelListContainer").innerHTML = makeList(channels);
     if(channels.length > 0) {
         document.getElementById("channelListContainer").dataset.visible = "block";
@@ -377,14 +403,12 @@ function makeList(channels) {
         ${sortedChannels.map(channel => `
             <button onclick="getChannelHistory('${channel.channelId}');">
                 <span>
-                    <img id="cheeseImg" 
-                        ${
+                    <img id="cheeseImg" ${
                             channel.cheese04 ? 'src="./images/cheese04.png"' :
                             channel.cheese03 ? 'src="./images/cheese03.png"' :
                             channel.cheese02 ? 'src="./images/cheese02.png"' :
                             channel.cheese01 ? 'src="./images/cheese01.png"' : ''
-                        }
-                    >
+                        }>
                     <img id="channelImg" src="${channel.channelImageUrl}" />
                 </span>
                 <p>${channel.channelName}</p>
@@ -401,14 +425,25 @@ function getChannelHistory(channelId) {
     channel = channels.find(channel => channel.channelId === channelId);
     
     document.getElementById("channelHistoryWrap").dataset.visible = "block";
-    document.getElementById("channelInfo").innerText = `${channel.channelName} 총 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원 (${channel.channelCount}회)`;
+
+    let channelInfoHtml = `${channel.channelName} 총 후원 금액 : ${Number(channel.channelTotal).toLocaleString("ko-KR")}원 (${channel.channelCount}회)`;
+    if(channel.channelTtsCount > 0) {
+        channelInfoHtml += ` [TTS : ${Number(channel.channelTtsTotal).toLocaleString("ko-KR")}원 (${channel.channelTtsCount}회)]`;
+    }
+    document.getElementById("channelInfo").innerText = channelInfoHtml;
 
     if(channel.yearData.length > 0) {
         let yearIdx = -1;
         for(let year of yearArr) {
             yearIdx = channel.yearData.findIndex(data => data.year === year);
             if(yearIdx !== -1) {
-                channelInfoYear += `<li>${channel.yearData[yearIdx].year}년 : ${Number(channel.yearData[yearIdx].yearTotal).toLocaleString("ko-KR")}원 (${channel.yearData[yearIdx].yearCount}회)</li>`;
+                let yearData = channel.yearData[yearIdx];
+                channelInfoYear += `<li>${yearData.year}년 : ${Number(yearData.yearTotal).toLocaleString("ko-KR")}원 (${yearData.yearCount}회)`;
+                if(yearData.yearTtsCount > 0) {
+                    channelInfoYear += ` [TTS : ${Number(yearData.yearTtsTotal).toLocaleString("ko-KR")}원 (${yearData.yearTtsCount}회)]`;
+                }
+                channelInfoYear += `</li>`;
+
                 yearIdx = -1;
             }
         }
@@ -523,8 +558,17 @@ function rendarCalendar(focusDay) {
     if(channel) {
         yearData = channel.yearData.find(data => data.year === year);
         monthData = yearData ? yearData.monthData.find(data => data.month === month) : null;
+        let monthTotalHtml = `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
 
-        document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthData ? (`<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)</h3>`) : `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
+        if(monthData) {
+            monthTotalHtml = `<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)`;
+            if(monthData.monthTtsCount > 0) {
+                monthTotalHtml += ` [TTS : ${Number(monthData.monthTtsTotal).toLocaleString("ko-KR")}원 (${monthData.monthTtsCount}회)]`;
+            }
+            monthTotalHtml += `</h3>`;
+        }
+
+        document.getElementsByClassName("calendar_month_total")[0].innerHTML = monthTotalHtml;
         document.getElementsByClassName("cheese_history")[0].innerHTML = `
         <ul>
             <li><button onclick="goToday();"><h4>TODAY</h4></button></li>
@@ -594,6 +638,10 @@ function rendarCalendar(focusDay) {
                     <li>${Number(dayData.dayTotal).toLocaleString("ko-KR")}원</li>
                     <li>(${dayData.dayCount}회)</li>
                 `;
+
+                if(dayData.dayTtsCount > 0) {
+                    dates[i] += `<li>[TTS : ${Number(dayData.dayTtsTotal).toLocaleString("ko-KR")}원 (${dayData.dayTtsCount}회)]</li>`;
+                }
             }
 
             dayData = null;
@@ -942,6 +990,8 @@ function rebuildChannels() {
         for(let channel of channels) {
             channel.channelTotal = 0;
             channel.channelCount = 0;
+            channel.channelTtsTotal = 0;
+            channel.channelTtsCount = 0;
             channel.cheese01 = false;
             channel.cheeseDate01 = null;
             channel.cheese02 = false;
@@ -967,6 +1017,8 @@ function rebuildChannels() {
                             for(let dayData of monthData.dayData) {
                                 channel.channelTotal += dayData.dayTotal;
                                 channel.channelCount += dayData.dayCount;
+                                channel.channelTtsTotal += dayData.dayTtsTotal;
+                                channel.channelTtsCount += dayData.dayTtsCount;
 
                                 if(!channel.firstCheeseDate) channel.firstCheeseDate = makeDate(year, month, dayData.day);
                                 else if(!channel.firstCheeseDate.localeCompare(makeDate(year, month, dayData.day))) channel.firstCheeseDate = makeDate(year, month, dayData.day);
@@ -1011,6 +1063,8 @@ function createNewChannelData(channelData) {
         channelImageUrl: channelData.channelImageUrl,
         channelTotal: 0,
         channelCount: 0,
+        channelTtsTotal: 0,
+        channelTtsCount: 0,
         cheese01: false,
         cheeseDate01: null,
         cheese02: false,
