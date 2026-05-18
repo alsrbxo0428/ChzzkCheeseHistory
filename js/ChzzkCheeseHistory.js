@@ -558,8 +558,8 @@ function rendarCalendar(focusDay) {
     if(channel) {
         yearData = channel.yearData.find(data => data.year === year);
         monthData = yearData ? yearData.monthData.find(data => data.month === month) : null;
+        
         let monthTotalHtml = `<h3>${month}월 후원 금액: 0원 (0회)</h3>`;
-
         if(monthData) {
             monthTotalHtml = `<h3>${month}월 후원 금액 : ${Number(monthData.monthTotal).toLocaleString("ko-KR")}원 (${monthData.monthCount}회)`;
             if(monthData.monthTtsCount > 0) {
