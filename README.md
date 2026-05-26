@@ -11,7 +11,10 @@
 - Chrome 웹 스토어
     - [Chzzk Cheese History](https://chromewebstore.google.com/detail/chzzk-cheese-history/gcojgdbmkogicdbkcofejogigdlfgkob)
 
-- [endlifeform] 님 제작
+- [Honsal] 님 Fork
+    - https://github.com/Honsal/ChzzkCheeseHistory (Version: 1.1.1 Firefox Fork)
+
+- [endlifeform] 님 Fork
     - https://github.com/endlifeform/ChzzkCheeseHistory
 
 ## 업데이트 내역
